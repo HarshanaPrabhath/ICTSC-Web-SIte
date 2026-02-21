@@ -6,7 +6,7 @@ function Navbar() {
 
   return (
   
-    <nav className="sticky top-0 z-100 px-4 py-3 lg:px-[20%] pointer-events-none">
+    <nav className="sticky top-0 z-100 px-4 py-3 lg:px-[13%]  md:px-[7%] pointer-events-none">
       <div className="pointer-events-auto relative rounded-2xl bg-gray-900/80 backdrop-blur-sm border border-white/10 shadow-2xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="relative flex h-16 items-center justify-between">
