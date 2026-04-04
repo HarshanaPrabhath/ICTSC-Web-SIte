@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import Logo from "../assets/logo.png";
 
 function Navbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
 
-  // Helper to check if a link is active
   const isActive = (path) => location.pathname === path;
 
   const navLinks = [
@@ -17,97 +16,111 @@ function Navbar() {
   ];
 
   return (
-    <nav className="sticky top-0 z-[100] px-4 py-3 lg:px-[13%] md:px-[7%] pointer-events-none">
-      <div className="pointer-events-auto relative rounded-2xl bg-gray-900/80 backdrop-blur-md border border-white/10 shadow-2xl">
+    <nav className="sticky top-0 z-[100] px-4 py-6 lg:px-[13%] md:px-[7%] pointer-events-none">
+      <div className="pointer-events-auto relative rounded-2xl bg-gray-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative flex h-16 items-center justify-between">
+          <div className="relative flex h-20 items-center justify-between">
             
-            {/* Mobile menu button */}
-            <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+            {/* 1. Logo (Left) */}
+            <div className="flex shrink-0 items-center z-10">
+              <Link to="/" className="hover:opacity-80 transition-opacity">
+                <img 
+                  src={Logo} 
+                  alt="ICTSC Logo" 
+                  className="h-12 w-auto object-contain" 
+                />
+              </Link>
+            </div>
+
+            {/* 2. Centered Menu (Desktop Only) */}
+            <div className="hidden sm:flex absolute inset-0 items-center justify-center pointer-events-none">
+              <div className="flex space-x-1 items-center h-full pointer-events-auto">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.path}
+                    to={link.path}
+                    className={`rounded-xl px-6 py-2.5 text-lg font-normal tracking-wide transition-all duration-300 ${
+                      isActive(link.path)
+                        ? "bg-blue-600/20 text-blue-400"
+                        : "text-gray-300 hover:bg-white/5 hover:text-white"
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* 3. Right-Most Elements */}
+            <div className="flex items-center gap-4 z-10">
+              {/* Contact Us Icon (Hidden on Mobile, visible on SM and up) */}
+              <Link 
+                to="/contact"
+                className={`hidden sm:flex items-center justify-center size-11 rounded-full border transition-all duration-300 ${
+                  isActive("/contact")
+                    ? "bg-blue-600 border-blue-500 text-white shadow-[0_0_15px_rgba(37,99,235,0.3)]"
+                    : "bg-white/5 border-white/10 text-gray-400 hover:text-white hover:border-blue-500"
+                }`}
+                title="Contact Us"
+              >
+                <svg 
+                  viewBox="0 0 24 24" 
+                  fill="none" 
+                  stroke="currentColor" 
+                  strokeWidth="2" 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  className="size-5"
+                >
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
+                </svg>
+              </Link>
+
+              {/* Mobile Toggle Button */}
               <button
                 type="button"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white focus:outline-none"
+                className="sm:hidden p-2 text-gray-400 hover:text-white"
               >
-                <span className="sr-only">Open main menu</span>
-                {!isMobileMenuOpen ? (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-6">
-                    <path d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                ) : (
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-6">
-                    <path d="M6 18L18 6M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                )}
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="size-7">
+                  <path d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"} strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
               </button>
             </div>
-
-            <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-              <Link to="/" className="flex shrink-0 items-center hover:opacity-80 transition-opacity">
-                <div className="italic px-3 py-1.5 text-xl font-black tracking-tighter text-white">
-                  ICT<span className="text-indigo-500">SC</span>
-                </div>
-              </Link>
-              
-              <div className="hidden sm:ml-6 sm:block">
-                <div className="flex space-x-4 items-center h-full">
-                  {navLinks.map((link) => (
-                    <Link
-                      key={link.path}
-                      to={link.path}
-                      className={`rounded-md px-3 py-2 text-sm font-medium transition-all duration-300 ${
-                        isActive(link.path)
-                          ? "bg-white/10 text-white shadow-lg"
-                          : "text-gray-300 hover:bg-white/5 hover:text-white"
-                      }`}
-                    >
-                      {link.name}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-              {/* Removed Bell Notification Button */}
-
-              <div className="relative ml-3">
-                <button
-                  onClick={() => setIsProfileOpen(!isProfileOpen)}
-                  className="bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-lg shadow-lg active:scale-95 transition-all"
-                >
-                  Admin
-                </button>
-
-                {isProfileOpen && (
-                  <div className="absolute right-0 z-[110] mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-2xl ring-1 ring-black/5 focus:outline-none">
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Your Profile</a>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                    <a href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600">Sign out</a>
-                  </div>
-                )}
-              </div>
-            </div>
+            
           </div>
         </div>
 
-        {/* Mobile Menu Content */}
+        {/* Mobile Menu Dropdown */}
         {isMobileMenuOpen && (
-          <div className="sm:hidden border-t border-white/10 px-2 pb-3 pt-2">
+          <div className="sm:hidden border-t border-white/10 px-4 pb-6 pt-4 space-y-2">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
                 to={link.path}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`block rounded-md px-3 py-2 text-base font-medium ${
+                className={`block rounded-xl px-4 py-4 text-xl font-normal ${
                   isActive(link.path)
-                    ? "bg-gray-900 text-white"
-                    : "text-gray-300 hover:bg-gray-700 hover:text-white"
+                    ? "bg-blue-600/20 text-blue-400"
+                    : "text-gray-300 hover:bg-white/5"
                 }`}
               >
                 {link.name}
               </Link>
             ))}
+            
+            {/* Contact Us link added INSIDE the mobile menu */}
+            <Link
+              to="/contact"
+              onClick={() => setIsMobileMenuOpen(false)}
+              className={`block rounded-xl px-4 py-4 text-xl font-normal border ${
+                isActive("/contact")
+                  ? "bg-blue-600/20 text-blue-400 border-blue-500/30"
+                  : "text-gray-300 hover:bg-white/5 border-transparent"
+              }`}
+            >
+              Contact Us
+            </Link>
           </div>
         )}
       </div>

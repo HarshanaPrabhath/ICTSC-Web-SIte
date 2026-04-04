@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 
-// 1. Program Card Component
+// 1. Program Card Component (Updated Colors)
 function ProgramCard({ program }) {
   const { title, date, location, image_url, description, tags, metadata } = program;
 
@@ -20,7 +20,7 @@ function ProgramCard({ program }) {
           
           {/* Location Badge */}
           <div className="absolute bottom-6 left-6 flex items-center gap-2">
-            <div className="size-2 rounded-full bg-indigo-500 animate-pulse"></div>
+            <div className="size-2 rounded-full bg-cyan-400 animate-pulse"></div>
             <span className="text-white text-[10px] font-bold uppercase tracking-widest opacity-80">
               {location}
             </span>
@@ -39,7 +39,7 @@ function ProgramCard({ program }) {
             {description}
           </p>
 
-          {/* Backend-Ready Data Row */}
+          {/* Data Row */}
           <div className="grid grid-cols-2 gap-8 mb-8 border-y border-white/5 py-6">
             <div>
               <p className="text-white font-black text-lg uppercase">{date}</p>
@@ -53,13 +53,13 @@ function ProgramCard({ program }) {
 
           {/* Action Row */}
           <div className="mt-auto flex flex-col sm:flex-row items-center justify-between gap-6">
-            <button className="w-full sm:w-auto bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase tracking-[0.2em] py-4 px-10 rounded-2xl transition-all active:scale-95 shadow-lg shadow-indigo-500/20">
+            <button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white text-[10px] font-black uppercase tracking-[0.2em] py-4 px-10 rounded-2xl transition-all active:scale-95 shadow-lg shadow-blue-500/20">
               View Full Report
             </button>
             
             <div className="flex flex-wrap gap-2">
               {tags.map((tag, i) => (
-                <span key={i} className="text-[9px] text-indigo-400 font-bold uppercase border border-indigo-500/20 bg-indigo-500/5 px-3 py-1 rounded-lg">
+                <span key={i} className="text-[9px] text-cyan-400 font-bold uppercase border border-cyan-500/20 bg-cyan-500/5 px-3 py-1 rounded-lg">
                   #{tag}
                 </span>
               ))}
@@ -73,15 +73,27 @@ function ProgramCard({ program }) {
 
 // 2. Main Page
 function Project() {
-  // Structure matches typical NoSQL/SQL JSON response
   const programs = [
     {
       id: "evt_001",
+      title: "School Empowering Program",
+      date: "05 MAR 2026",
+      location: "Southern Region Schools",
+      image_url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+      description: "An outreach initiative designed to empower rural school students with modern ICT tools. We provided hands-on training in coding basics and hardware maintenance to inspire the next generation of tech leaders.",
+      tags: ["Empowerment", "Outreach", "ICT"],
+      metadata: {
+        duration: "06 Hours",
+        type: "Community Service"
+      }
+    },
+    {
+      id: "evt_002",
       title: "Tech Awareness Workshop",
       date: "15 FEB 2026",
       location: "Main Assembly Hall",
       image_url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
-      description: "A comprehensive session for junior students covering basic cybersecurity and digital citizenship. This report details the curriculum covered and student engagement metrics.",
+      description: "A comprehensive session for university freshmen covering cybersecurity and digital citizenship. Detailed curriculum analysis and engagement metrics are included in this report.",
       tags: ["Education", "Security"],
       metadata: {
         duration: "03 Hours",
@@ -89,12 +101,12 @@ function Project() {
       }
     },
     {
-      id: "evt_002",
+      id: "evt_003",
       title: "Sports Day Coverage",
       date: "20 JAN 2026",
-      location: "School Grounds",
+      location: "University Grounds",
       image_url: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80",
-      description: "Official media coverage report for the 2026 Annual Sports Meet. Includes technical setup for live streaming and social media reach statistics.",
+      description: "Official media coverage report for the Annual Sports Meet. Includes technical setup for live streaming and social media reach statistics.",
       tags: ["Media", "Live"],
       metadata: {
         duration: "Full Day",
@@ -104,7 +116,7 @@ function Project() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
       <div className="fixed inset-0 z-0">
         <img
           src="src/assets/495134092_1265069908951961_8508488428443727747_n.jpg"
@@ -121,7 +133,7 @@ function Project() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
             <div>
               <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none">
-                PROGRAM <span className="text-indigo-500">REPORTS</span>
+                PROGRAM <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">REPORTS</span>
               </h2>
               <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mt-4">
                 Official ICTSC Archive System

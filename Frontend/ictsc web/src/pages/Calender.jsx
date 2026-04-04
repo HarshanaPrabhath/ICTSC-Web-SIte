@@ -1,38 +1,37 @@
 import React from "react";
 import Navbar from "../components/Navbar";
 
-// 1. Sleek Event Card (Refactored for Backend Data)
+// 1. Sleek Event Card (Cyan/Blue Theme)
 function EventDisplay({ event }) {
-  // Destructuring the event object for cleaner code
   const { date, month, year, title, info, responsible_party } = event;
 
   return (
     <div className="relative group overflow-hidden">
-      {/* Glow Effect on Hover */}
-      <div className="absolute -inset-0.5 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
+      {/* Glow Effect on Hover - Updated to Blue/Cyan */}
+      <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
       
       <div className="relative flex flex-col md:flex-row items-start md:items-center bg-[#0f172a]/80 border border-white/10 rounded-3xl p-8 backdrop-blur-2xl">
         
-        {/* Date Section */}
-        <div className="flex flex-col mb-4 md:mb-0 md:mr-10 border-l-2 border-indigo-500 pl-6 shrink-0">
+        {/* Date Section - Cyan Accent */}
+        <div className="flex flex-col mb-4 md:mb-0 md:mr-10 border-l-2 border-cyan-500 pl-6 shrink-0">
           <span className="text-4xl font-black text-white tracking-tighter">{date}</span>
-          <span className="text-indigo-400 font-bold uppercase tracking-[0.2em] text-xs">{month} {year}</span>
+          <span className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-xs">{month} {year}</span>
         </div>
 
         {/* Content Section */}
         <div className="flex-grow">
           <div className="flex flex-wrap items-center gap-3 mb-3">
-            {/* Responsible Person Section - Styled for prominence */}
-            <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-indigo-500/30 transition-colors">
-              <div className="size-2 rounded-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"></div>
+            {/* Responsible Person Section */}
+            <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-cyan-500/30 transition-colors">
+              <div className="size-2 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
               <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">
                 Responsible: <span className="text-white ml-1">{responsible_party.name}</span> 
-                <span className="text-indigo-400/80 ml-2 italic">— {responsible_party.designation}</span>
+                <span className="text-cyan-400/80 ml-2 italic">— {responsible_party.designation}</span>
               </p>
             </div>
           </div>
 
-          <h3 className="text-2xl font-bold text-white group-hover:text-indigo-400 transition-colors duration-300">
+          <h3 className="text-2xl font-bold text-white group-hover:text-cyan-400 transition-colors duration-300">
             {title}
           </h3>
           <p className="text-gray-400 mt-2 text-sm leading-relaxed max-w-xl">
@@ -40,11 +39,11 @@ function EventDisplay({ event }) {
           </p>
         </div>
 
-        {/* Decorative Element */}
+        {/* Decorative Element - Cyan hover */}
         <div className="hidden md:block ml-4">
           <div className="flex gap-1">
             {[1, 2, 3].map((i) => (
-              <div key={i} className="w-1.5 h-10 bg-white/5 rounded-full group-hover:bg-indigo-500/40 transition-all duration-500" 
+              <div key={i} className="w-1.5 h-10 bg-white/5 rounded-full group-hover:bg-cyan-500/40 transition-all duration-500" 
                    style={{ transitionDelay: `${i * 100}ms` }}></div>
             ))}
           </div>
@@ -56,7 +55,6 @@ function EventDisplay({ event }) {
 
 // 2. Main Page Component
 function Calender() {
-  // Structure mimics a JSON response from a REST API or Firebase
   const events = [
     {
       id: "ev_2026_001",
@@ -97,7 +95,7 @@ function Calender() {
   ];
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-indigo-500/30">
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-cyan-500/30">
       <div className="fixed inset-0 z-0">
         <img
           src="src/assets/495134092_1265069908951961_8508488428443727747_n.jpg"
@@ -114,7 +112,7 @@ function Calender() {
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
             <div>
               <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none">
-                THE <span className="text-indigo-500">AGENDA</span>
+                THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AGENDA</span>
               </h2>
               <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mt-4">
                 Official Committee Roadmap 2026
