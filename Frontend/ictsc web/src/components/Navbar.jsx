@@ -17,7 +17,7 @@ function Navbar() {
 
   return (
     <nav className="sticky top-0 z-[100] px-4 py-6 lg:px-[13%] md:px-[7%] pointer-events-none">
-      <div className="pointer-events-auto relative rounded-2xl bg-gray-900/90 backdrop-blur-xl border border-white/10 shadow-2xl">
+      <div className="pointer-events-auto relative rounded-2xl bg-gray-900/90 backdrop-blur-lg border border-white/10 shadow-2xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="relative flex h-20 items-center justify-between">
             

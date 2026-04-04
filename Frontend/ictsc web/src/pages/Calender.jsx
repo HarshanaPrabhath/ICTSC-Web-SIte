@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // 1. Sleek Event Card (Cyan/Blue Theme)
 function EventDisplay({ event }) {
@@ -136,6 +137,7 @@ function Calender() {
           </div>
         </section>
       </div>
+       <Footer />
     </div>
   );
 }

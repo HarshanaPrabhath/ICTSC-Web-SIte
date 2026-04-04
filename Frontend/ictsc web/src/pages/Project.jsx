@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // 1. Program Card Component (Updated Colors)
 function ProgramCard({ program }) {
@@ -150,12 +151,10 @@ function Project() {
             ))}
           </div>
 
-          <footer className="mt-32 py-10 border-t border-white/5 flex justify-between items-center text-gray-600 text-[10px] font-black uppercase tracking-widest">
-            <span>© 2026 ICTSC</span>
-            <span>Internal Documentation Only</span>
-          </footer>
+          
         </section>
       </div>
+            <Footer />
     </div>
   );
 }

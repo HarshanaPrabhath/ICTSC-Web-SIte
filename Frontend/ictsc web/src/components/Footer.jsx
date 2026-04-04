@@ -11,7 +11,7 @@ function Footer() {
           {/* Brand Section */}
           <div className="space-y-4">
             <h2 className="text-2xl font-black text-white tracking-tighter italic">
-              ICT<span className="text-indigo-500">SC</span>
+              ICT<span className="text-blue-500">SC</span>
             </h2>
             <p className="text-gray-400 text-sm leading-relaxed max-w-xs">
               Empowering the next generation of tech leaders at the Faculty of Technology, University of Ruhuna.
@@ -32,10 +32,10 @@ function Footer() {
           <div className="space-y-4">
             <h3 className="text-white font-bold uppercase tracking-widest text-xs">Navigation</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">Home</Link></li>
-              <li><Link to="/events" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">Events</Link></li>
-              <li><Link to="/team" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">Our Team</Link></li>
-              <li><Link to="/register" className="text-gray-400 hover:text-indigo-400 text-sm transition-colors">Registration</Link></li>
+              <li><Link to="/" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Home</Link></li>
+              <li><Link to="/events" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Events</Link></li>
+              <li><Link to="/team" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Our Team</Link></li>
+              <li><Link to="/register" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Registration</Link></li>
             </ul>
           </div>
 
@@ -44,15 +44,15 @@ function Footer() {
             <h3 className="text-white font-bold uppercase tracking-widest text-xs">Contact Us</h3>
             <div className="space-y-3">
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <FaEnvelope className="text-indigo-500" />
+                <FaEnvelope className="text-blue-500" />
                 <a href="mailto:ictsc@tech.ruh.ac.lk" className="hover:text-white transition-colors">ictsc@tech.ruh.ac.lk</a>
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
-                <FaPhoneAlt className="text-indigo-500" />
+                <FaPhoneAlt className="text-blue-500" />
                 <span>+94 123 456 789</span>
               </div>
               <div className="flex items-start gap-3 text-gray-400 text-sm">
-                <FaMapMarkerAlt className="text-indigo-500 mt-1" />
+                <FaMapMarkerAlt className="text-blue-500 mt-1" />
                 <span>Faculty of Technology,<br />University of Ruhuna, Karagoda Uyangoda.</span>
               </div>
             </div>
@@ -66,7 +66,7 @@ function Footer() {
             © {new Date().getFullYear()} ICT Student Club • Faculty of Technology
           </p>
           <p className="text-gray-500 text-[10px] uppercase tracking-[0.2em]">
-            Developed by <span className="text-indigo-400">ICTSC Dev Team</span>
+            Developed by <span className="text-blue-400">ICTSC Dev Team</span>
           </p>
         </div>
       </div>

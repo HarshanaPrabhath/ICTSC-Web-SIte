@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
 // 1. Reusable Team Card Component
 function TeamCard({ name, role, image, isLarge, isSmall }) {
@@ -49,7 +50,7 @@ function Team() {
   // --- Data Structure ---
   const board = {
     president: { name: "Chirath Wijesinghe", role: "President" },
-    vicePresident: { name: "Harshana Prabath", role: "Vice President" },
+    vicePresident: { name: "Harshana Prabhath", role: "Vice President" },
     secretaries: [
       { name: "Sajini Kaushalya", role: "Joint Secretary" },
       { name: "Shonali Galpihila", role: "Joint Secretary" },
@@ -155,6 +156,7 @@ function Team() {
 
         </section>
       </div>
+       <Footer />
     </div>
   );
 }
