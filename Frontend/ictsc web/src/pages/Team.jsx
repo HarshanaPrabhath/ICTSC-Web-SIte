@@ -2,7 +2,9 @@ import React from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// 1. Reusable Team Card Component
+// Import your images here
+// Example: import PresidentImg from "../assets/team/president.jpg";
+
 function TeamCard({ name, role, image, isLarge, isSmall }) {
   return (
     <div
@@ -14,10 +16,8 @@ function TeamCard({ name, role, image, isLarge, isSmall }) {
       ${isSmall ? "p-4" : ""}
     `}
     >
-      {/* Animated Top Accent */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-500 to-blue-500 opacity-0 group-hover:opacity-100 transition-opacity rounded-t-3xl"></div>
 
-      {/* Profile Image Container */}
       <div
         className={`
         relative rounded-2xl overflow-hidden border border-white/10 grayscale group-hover:grayscale-0 transition-all duration-700
@@ -26,13 +26,12 @@ function TeamCard({ name, role, image, isLarge, isSmall }) {
       `}
       >
         <img 
-          src={image || "https://via.placeholder.com/400x400?text=ICTSC"} 
+          src={image || "https://via.placeholder.com/400x400?text=User"} 
           alt={name} 
           className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" 
         />
       </div>
 
-      {/* Text Content */}
       <div className="text-center mt-6">
         <h3 className={`font-bold text-white tracking-tight ${isLarge ? "text-2xl" : isSmall ? "text-sm" : "text-lg"}`}>
           {name}
@@ -45,48 +44,52 @@ function TeamCard({ name, role, image, isLarge, isSmall }) {
   );
 }
 
-// 2. Main Team Page
 function Team() {
-  // --- Data Structure ---
+  // --- Updated Data Structure with Image Paths ---
   const board = {
-    president: { name: "Chirath Wijesinghe", role: "President" },
-    vicePresident: { name: "Harshana Prabhath", role: "Vice President" },
+    president: { 
+        name: "Chirath Wijesinghe", 
+        role: "President", 
+        image: "src/assets/EXECUTIVE/Chirath.jpg" // Update with actual path
+    },
+    vicePresident: { 
+        name: "Harshana Prabhath", 
+        role: "Vice President", 
+        image: "src/assets/EXECUTIVE/Harshana.jpg" 
+    },
     secretaries: [
-      { name: "Sajini Kaushalya", role: "Joint Secretary" },
-      { name: "Shonali Galpihila", role: "Joint Secretary" },
+      { name: "Sajini Kaushalya", role: "Joint Secretary", image: "src/assets/EXECUTIVE/Sajini.jpg" },
+      { name: "Shonali Galpihila", role: "Joint Secretary", image: "src/assets/EXECUTIVE/Shonali.jpg" },
     ]
   };
 
   const admin = [
-    { name: "Nirodha Madusanka", role: "Junior Treasurer" },
-    { name: "Kavishan M Rathnayaka", role: "HR Team" },
-    { name: "Dilmi Amanda", role: "HR Team" },
+    { name: "Nirodha Madusanka", role: "Junior Treasurer", image: "src/assets/EXECUTIVE/Nirodha.jpg" },
+    { name: "Kavishan M Rathnayaka", role: "HR Team", image: "src/assets/EXECUTIVE/Kavishan.jpg" },
+    { name: "Dilmi Amanda", role: "HR Team", image: "src/assets/EXECUTIVE/Dilmi.jpg" },
   ];
 
   const mediaMarketing = [
-    { name: "Gihan Kaveesha", role: "Director of Media & Marketing", head: true },
-    { name: "Kavindu Dilshan", role: "Media Unit" },
-    { name: "Naveen Rasanka", role: "Media Unit" },
-    { name: "Tharinda Gimhana", role: "Media Unit" },
-    { name: "Hasaranga Kariyawasam", role: "Media Unit" },
-    { name: "Senitha Samarasinghe", role: "Media Unit" }
+    { name: "Gihan Kaveesha", role: "Director of Media & Marketing", head: true, image: "src/assets/EXECUTIVE/Gihan.jpg" },
+    { name: "Kavindu Dilshan", role: "Media Unit", image: "src/assets/EXECUTIVE/Kavindu.jpg" },
+    { name: "Naveen Rasanka", role: "Media Unit", image: "src/assets/EXECUTIVE/Naveen.jpg" },
+    { name: "Tharinda Gimhana", role: "Media Unit", image: "src/assets/EXECUTIVE/Tharinda.jpg" },
+    { name: "Hasaranga Kariyawasam", role: "Media Unit", image: "src/assets/EXECUTIVE/Hasaranga.jpg" },
+    { name: "Senitha Samarasinghe", role: "Media Unit", image: "src/assets/EXECUTIVE/Senitha.jpg" }
   ];
 
   const committee = [
-    "Ishan Sivmal", "Nithya Madhuhansi", "Shanuka Saranga", 
-    "Nimeshka Kumudumali", "Dasindu Dilvan", "Dulsha Hemini"
+    { name: "Ishan Sivmal", image: "src/assets/EXECUTIVE/Ishan.jpg" },
+    { name: "Nithya Madhuhansi", image: "src/assets/EXECUTIVE/Nithya.jpg" },
+    { name: "Shanuka Saranga", image: "src/assets/EXECUTIVE/Shanuka.jpg" },
+    { name: "Nimeshka Kumudumali", image: "src/assets/EXECUTIVE/Nimeshka.jpg" },
+    { name: "Dasindu Dilvan", image: "src/assets/EXECUTIVE/Dasindu.jpg" },
+    { name: "Dulsha Hemini", image: "src/assets/EXECUTIVE/Dulsha.jpg" }
   ];
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-cyan-500/30 font-sans">
-      
-      {/* Background Ambience */}
       <div className="fixed inset-0 z-0">
-        <img
-          src="src/assets/495134092_1265069908951961_8508488428443727747_n.jpg"
-          alt="Background"
-          className="w-full h-full object-cover opacity-[0.03]"
-        />
         <div className="absolute inset-0 bg-gradient-to-b from-[#020617] via-transparent to-[#020617]"></div>
       </div>
 
@@ -95,7 +98,6 @@ function Team() {
 
         <section className="max-w-7xl mx-auto px-6 py-20">
           
-          {/* Main Page Title */}
           <div className="text-center mb-24">
             <h2 className="text-5xl md:text-6xl font-black italic tracking-tighter uppercase leading-none">
               The <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Board</span>
@@ -105,31 +107,40 @@ function Team() {
             </p>
           </div>
 
-          {/* SECTION 1: THE CORE LEADERSHIP */}
+          {/* SECTION 1: CORE LEADERSHIP */}
           <div className="flex justify-center mb-12">
             <div className="w-full max-w-sm">
-              <TeamCard name={board.president.name} role={board.president.role} isLarge />
+              <TeamCard 
+                name={board.president.name} 
+                role={board.president.role} 
+                image={board.president.image} 
+                isLarge 
+              />
             </div>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-5xl mx-auto mb-32">
-            <TeamCard name={board.vicePresident.name} role={board.vicePresident.role} />
+            <TeamCard 
+                name={board.vicePresident.name} 
+                role={board.vicePresident.role} 
+                image={board.vicePresident.image} 
+            />
             {board.secretaries.map((sec, i) => (
-              <TeamCard key={i} name={sec.name} role={sec.role} />
+              <TeamCard key={i} name={sec.name} role={sec.role} image={sec.image} />
             ))}
           </div>
 
-          {/* SECTION 2: ADMINISTRATION (HR & TREASURY) */}
+          {/* SECTION 2: ADMINISTRATION */}
           <div className="text-center mb-12">
             <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-blue-500/60">Operations & HR</h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 max-w-4xl mx-auto mb-32">
             {admin.map((person, i) => (
-              <TeamCard key={i} name={person.name} role={person.role} />
+              <TeamCard key={i} name={person.name} role={person.role} image={person.image} />
             ))}
           </div>
 
-          {/* SECTION 3: MEDIA & MARKETING (Led by Gihan Kaveesha) */}
+          {/* SECTION 3: MEDIA & MARKETING */}
           <div className="text-center mb-12">
             <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-cyan-500/60">Media & Marketing Unit</h3>
           </div>
@@ -139,6 +150,7 @@ function Team() {
                 key={i} 
                 name={member.name} 
                 role={member.role} 
+                image={member.image}
                 isSmall={!member.head} 
               />
             ))}
@@ -149,14 +161,20 @@ function Team() {
             <h3 className="text-[11px] font-black uppercase tracking-[0.5em] text-gray-600">Committee Members</h3>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {committee.map((name, i) => (
-              <TeamCard key={i} name={name} role="Committee Member" isSmall />
+            {committee.map((person, i) => (
+              <TeamCard 
+                key={i} 
+                name={person.name} 
+                role="Committee Member" 
+                image={person.image}
+                isSmall 
+              />
             ))}
           </div>
 
         </section>
       </div>
-       <Footer />
+      <Footer />
     </div>
   );
 }
