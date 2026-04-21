@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@material-tailwind/react";
 
 // Pages
@@ -14,7 +14,6 @@ import TShirtRegistration from "./pages/TShirtRegistration";
 function App() {
   return (
     <ThemeProvider>
-      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/team" element={<Team />} />
@@ -26,7 +25,6 @@ function App() {
           {/* Admin Route */}
           <Route path="/admin" element={<AdminDashboard />} />
         </Routes>
-      </BrowserRouter>
     </ThemeProvider>
   );
 }
