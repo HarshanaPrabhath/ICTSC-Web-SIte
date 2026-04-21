@@ -41,19 +41,21 @@ function Home() {
         {/* Hero Section */}
         <div className="relative flex flex-col items-center justify-center min-h-[85vh] overflow-hidden pt-4 md:pt-0">
           <div className="text-center px-4">
-            {/* Reduced gap from Navbar */}
-            <p className="text-cyan-400 font-bold uppercase tracking-[0.3em] md:tracking-[0.6em] text-[8px] md:text-[10px] mt-2 mb-4 md:mb-6">
+            {/* Tagline */}
+            <p className="text-cyan-400 font-bold uppercase tracking-[0.2em] md:tracking-[0.6em] text-[8px] md:text-[10px] mt-2 mb-4 md:mb-6">
               University of Ruhuna • Faculty of Technology
             </p>
 
-            {/* Added gap above and below Welcome heading */}
-            <div className="my-12 md:my-16">
-                <h1 className="text-6xl sm:text-8xl md:text-8xl font-black text-white tracking-tighter leading-[1] md:leading-none">
+            {/* Welcome Heading - Fixed Overlap on SM screens */}
+            <div className="my-10 md:my-16">
+              <h1 className="text-6xl sm:text-7xl md:text-8xl font-black text-white 
+                tracking-tight sm:tracking-tighter 
+                leading-[1.1] sm:leading-none">
                 Welcome to <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600  px-2">
-                    ICTSC
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600 px-2">
+                  ICTSC
                 </span>
-                </h1>
+              </h1>
             </div>
 
             <p className="text-[14px] sm:text-base md:text-lg text-gray-300 max-w-2xl mx-auto font-light leading-relaxed px-4">
@@ -76,10 +78,10 @@ function Home() {
           </div>
         </div>
 
-        {/* Objectives Section - Color Synced with ICTSC */}
+        {/* Objectives Section */}
         <div className="max-w-7xl mx-auto p-6 md:p-20">
           <div className="mb-12 text-center md:text-left">
-            <h2 className="text-3xl md:text-5xl font-black text-white  tracking-tighter uppercase">
+            <h2 className="text-3xl md:text-5xl font-black text-white tracking-tight sm:tracking-tighter uppercase">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Objectives</span>
             </h2>
             <div className="h-1.5 w-24 bg-gradient-to-r from-cyan-400 to-blue-600 mt-4 mx-auto md:mx-0 rounded-full"></div>
@@ -91,11 +93,9 @@ function Home() {
                 key={index}
                 className="group relative overflow-hidden bg-white/5 border border-white/10 rounded-[1.5rem] md:rounded-[2.5rem] p-8 md:p-10 backdrop-blur-xl hover:border-cyan-500/30 transition-all duration-500"
               >
-                {/* Top accent line matching ICTSC Gradient */}
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 
-                {/* Title using ICTSC Gradient Colors */}
-                <h3 className="text-xl md:text-2xl font-black mb-4   tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:to-blue-600 transition-all">
+                <h3 className="text-xl md:text-2xl font-black mb-4 tracking-normal sm:tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:to-blue-600 transition-all">
                   {obj.title}
                 </h3>
                 
@@ -103,7 +103,6 @@ function Home() {
                   {obj.desc}
                 </p>
 
-                {/* Subtle bottom-right glow */}
                 <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-cyan-500/5 blur-[50px] group-hover:bg-blue-500/10 transition-all"></div>
               </div>
             ))}
@@ -115,4 +114,4 @@ function Home() {
   );
 }
 
-export default Home;  
+export default Home;

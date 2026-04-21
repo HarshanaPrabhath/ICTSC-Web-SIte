@@ -82,7 +82,7 @@ const programs = [
     date: "12 APR 2026",
     location: "ICTSC Tech Hub",
     // Fixed: Modern code/web development image
-    image_url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+    image_url: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776790549/Website_Launch_Image_oscjir.png",
     description: "The internal development phase for the new ICTSC community portal. This project involves building a responsive, modern platform using React and Tailwind CSS to manage student resources and events.",
     tags: ["Web Dev", "React", "Tech"],
     metadata: {
@@ -96,7 +96,7 @@ const programs = [
     date: "10 May 2026",
     location: "Faculty Premises",
     // Fixed: Clothing/Merchandise branding image
-    image_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop",
+    image_url: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776791001/copy_of_whatsapp_image_2026-04-21_at_182503_rg5omt_4eb41b.jpg",
     description: "The official launch of the ICT Student Club branded apparel. A community event designed to foster team spirit, club identity, and professional branding among the faculty technology students.",
     tags: ["Merchandise", "Community", "Branding"],
     metadata: {
