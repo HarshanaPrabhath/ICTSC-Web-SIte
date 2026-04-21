@@ -31,7 +31,7 @@ function ProgramCard({ program }) {
         {/* Content Section */}
         <div className="p-8 lg:p-12 flex flex-col">
           <div className="mb-6">
-            <h3 className="text-4xl font-black text-white italic tracking-tighter uppercase leading-none">
+            <h3 className="text-4xl font-black text-white  tracking-tighter uppercase leading-none">
               {title}
             </h3>
           </div>
@@ -75,20 +75,7 @@ function ProgramCard({ program }) {
 // 2. Main Page
 function Project() {
 const programs = [
-  {
-    id: "evt_001",
-    title: "School Empowering Program",
-    date: "29 MAY 2026",
-    location: "Southern Region Schools",
-    // Fixed: High-quality school/education image from Unsplash
-    image_url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
-    description: "An outreach initiative designed to empower rural school students with modern ICT tools. We provided hands-on training in coding basics and hardware maintenance to inspire the next generation of tech leaders.",
-    tags: ["Empowerment", "Outreach", "ICT"],
-    metadata: {
-      duration: "04 Hours",
-      type: "Community Service"
-    }
-  },
+ 
   {
     id: "evt_002",
     title: "Official Website Development",
@@ -136,7 +123,7 @@ const programs = [
         <section className="max-w-7xl mx-auto px-6 py-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
             <div>
-              <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none">
+              <h2 className="text-6xl font-black tracking-tighter uppercase leading-none">
                 PROGRAM <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">REPORTS</span>
               </h2>
               <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mt-4">

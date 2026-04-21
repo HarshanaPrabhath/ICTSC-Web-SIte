@@ -50,7 +50,7 @@ function Home() {
             <div className="my-12 md:my-16">
                 <h1 className="text-6xl sm:text-8xl md:text-8xl font-black text-white tracking-tighter leading-[1] md:leading-none">
                 Welcome to <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600 italic px-2">
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-blue-400 to-blue-600  px-2">
                     ICTSC
                 </span>
                 </h1>
@@ -79,7 +79,7 @@ function Home() {
         {/* Objectives Section - Color Synced with ICTSC */}
         <div className="max-w-7xl mx-auto p-6 md:p-20">
           <div className="mb-12 text-center md:text-left">
-            <h2 className="text-3xl md:text-5xl font-black text-white italic tracking-tighter uppercase">
+            <h2 className="text-3xl md:text-5xl font-black text-white  tracking-tighter uppercase">
               Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Objectives</span>
             </h2>
             <div className="h-1.5 w-24 bg-gradient-to-r from-cyan-400 to-blue-600 mt-4 mx-auto md:mx-0 rounded-full"></div>
@@ -95,7 +95,7 @@ function Home() {
                 <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-cyan-400 to-blue-600 opacity-50 group-hover:opacity-100 transition-opacity"></div>
                 
                 {/* Title using ICTSC Gradient Colors */}
-                <h3 className="text-xl md:text-2xl font-black mb-4 italic tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:to-blue-600 transition-all">
+                <h3 className="text-xl md:text-2xl font-black mb-4   tracking-tighter uppercase text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:to-blue-600 transition-all">
                   {obj.title}
                 </h3>
                 

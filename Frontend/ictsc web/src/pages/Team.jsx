@@ -98,7 +98,7 @@ function Team() {
 
   const mediaMarketing = [
     { name: "Gihan Kaveesha", role: "Director of Media & Marketing", head: true, image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781347/Gihan_ogjayo.jpg" },
-    { name: "Kavindu Dilshan", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781395/Kavindu_pttnl6.pngKavindu" },
+    { name: "Kavindu Dilshan", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781395/Kavindu_pttnl6.png" },
     { name: "Naveen Rasanka", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781366/Naveen_mpvaot.jpg" },
     { name: "Tharinda Gimhana", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781364/Tharinda_isehqz.jpg" },
     { name: "Hasaranga Kariyawasam", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781430/Hass_rnvfeh.jpg" },
@@ -122,7 +122,7 @@ function Team() {
 
         {/* Header */}
         <div className="text-center mb-24">
-          <h2 className="text-5xl md:text-6xl font-black italic tracking-tighter uppercase leading-none">
+          <h2 className="text-5xl md:text-6xl font-black   tracking-tighter uppercase leading-none">
             The <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">Board</span>
           </h2>
           <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mt-6">

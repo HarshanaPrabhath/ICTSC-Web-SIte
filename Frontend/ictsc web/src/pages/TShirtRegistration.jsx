@@ -111,7 +111,7 @@ function TShirtRegistration() {
               <div className="inline-block px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
                 <span className="text-blue-400 text-[10px] font-black uppercase tracking-[0.2em]">Official Merchandise</span>
               </div>
-              <h2 className="text-5xl font-black italic tracking-tighter uppercase mb-2 leading-none">
+              <h2 className="text-5xl font-black  tracking-tighter uppercase mb-2 leading-none">
                 T-Shirt <span className="text-blue-500">Release</span>
               </h2>
             </div>
@@ -123,11 +123,11 @@ function TShirtRegistration() {
             <div className="flex gap-4">
                <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
                   <p className="text-[10px] text-gray-500 uppercase font-bold mb-2">Price</p>
-                  <p className="text-2xl font-black italic">1,600 LKR</p>
+                  <p className="text-2xl font-black ">1,600 LKR</p>
                </div>
                <div className="flex-1 bg-blue-600 rounded-2xl p-5 text-center">
                   <p className="text-blue-100 text-[10px] uppercase font-bold mb-2">Deadline</p>
-                  <p className="text-2xl font-black italic">APRIL 30</p>
+                  <p className="text-2xl font-black ">APRIL 30</p>
                </div>
             </div>
 

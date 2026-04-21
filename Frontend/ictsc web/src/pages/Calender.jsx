@@ -68,18 +68,7 @@ function Calender() {
         designation: "Web Master"
       }
     },
-    {
-      id: "ev_2026_002",
-      date: "29",
-      month: "APR ",
-      year: "2026",
-      title: "School Empowering Program",
-      info: "Outreach program at Southern Region Schools to provide hands-on ICT training and distribute educational resources.",
-      responsible_party: {
-        name: "Outreach Coordinator",
-        designation: "Community Lead"
-      }
-    },
+    
     {
       id: "ev_2026_003",
       date: "10",
@@ -111,7 +100,7 @@ function Calender() {
         <section className="max-w-7xl mx-auto px-6 py-20">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
             <div>
-              <h2 className="text-6xl font-black italic tracking-tighter uppercase leading-none">
+              <h2 className="text-6xl font-black   tracking-tighter uppercase leading-none">
                 THE <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-500">AGENDA</span>
               </h2>
               <p className="text-gray-500 font-bold uppercase tracking-[0.4em] text-[10px] mt-4">
