@@ -49,12 +49,12 @@ function Team() {
     president: {
       name: "Chirath Wijesinghe",
       role: "President",
-      image: "src/assets/executive/Chirath.jpg",
+      image: "./src/assets/executive/Chirath.jpg",
     },
     vicePresident: {
       name: "Harshana Prabhath",
       role: "Vice President",
-      image: "src/assets/executive/harshana.jpg",
+      image: "./src/assets/executive/Harshana.jpg",
     },
     secretaries: [
       { name: "Sajini Kaushalya", role: "Joint Secretary", image: "src/assets/executive/sajini.jpg" },
