@@ -49,7 +49,7 @@ function Team() {
     president: {
       name: "Chirath Wijesinghe",
       role: "President",
-      image: "src/assets/executive/chirath.jpg",
+      image: "src/assets/executive/Chirath.jpg",
     },
     vicePresident: {
       name: "Harshana Prabhath",
