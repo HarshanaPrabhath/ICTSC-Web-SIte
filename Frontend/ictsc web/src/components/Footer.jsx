@@ -33,7 +33,7 @@ function Footer() {
             <h3 className="text-white font-bold uppercase tracking-widest text-xs">Navigation</h3>
             <ul className="space-y-2">
               <li><Link to="/" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Home</Link></li>
-              <li><Link to="/events" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Events</Link></li>
+              <li><Link to="/projects" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Projects</Link></li>
               <li><Link to="/team" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Our Team</Link></li>
               <li><Link to="/register" className="text-gray-400 hover:text-blue-400 text-sm transition-colors">Registration</Link></li>
             </ul>
@@ -49,7 +49,7 @@ function Footer() {
               </div>
               <div className="flex items-center gap-3 text-gray-400 text-sm">
                 <FaPhoneAlt className="text-blue-500" />
-                <span>+94 123 456 789</span>
+                <span>+94 78 626 8640</span>
               </div>
               <div className="flex items-start gap-3 text-gray-400 text-sm">
                 <FaMapMarkerAlt className="text-blue-500 mt-1" />

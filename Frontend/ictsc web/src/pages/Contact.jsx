@@ -50,11 +50,11 @@ function Contact() {
                 <div className="space-y-6">
                   <div>
                     <p className="text-xs text-gray-400 uppercase">President</p>
-                    <p className="text-lg font-medium">+94 XX XXX XXXX</p>
+                    <p className="text-lg font-medium">+94 78 626 8640</p>
                   </div>
                   <div>
                     <p className="text-xs text-gray-400 uppercase">Vice President</p>
-                    <p className="text-lg font-medium">+94 XX XXX XXXX</p>
+                    <p className="text-lg font-medium">+94 76 338 4586</p>
                   </div>
                   <div className="pt-4 border-t border-white/10">
                     <p className="text-xs text-gray-400 uppercase">General Inquiries</p>
