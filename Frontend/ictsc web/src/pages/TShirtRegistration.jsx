@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 // FIREBASE IMPORTS
-import { db } from "../firebaseconfig"; 
+import { db } from "../firebaseConfig"; 
 import { collection, addDoc, serverTimestamp, getCountFromServer } from "firebase/firestore";
 
 function TShirtRegistration() {
