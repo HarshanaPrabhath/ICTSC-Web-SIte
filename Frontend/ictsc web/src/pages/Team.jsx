@@ -4,30 +4,30 @@ import Footer from "../components/Footer";
 
 /* ================= IMAGE IMPORTS ================= */
 
-// Executive
-import Chirath from "../assets/executive/Chirath.jpg";
+// // Executive
+// import Chirath from "../assets/executive/Chirath.jpg";
 
-import Sajini from "../assets/executive/sajini.jpg";
-import Shonali from "../assets/executive/shonali.jpg";
-import Niroda from "../assets/executive/Niroda.jpg";
-import Kavishan from "../assets/executive/Kavishan.jpg";
-import Amanda from "../assets/executive/Amanda.jpeg";
+// import Sajini from "../assets/executive/sajini.jpg";
+// import Shonali from "../assets/executive/shonali.jpg";
+// import Niroda from "../assets/executive/Niroda.jpg";
+// import Kavishan from "../assets/executive/Kavishan.jpg";
+// import Amanda from "../assets/executive/Amanda.jpeg";
 
-// Media
-import Gihan from "../assets/media/Gihan.jpeg";
-import Kavindu from "../assets/media/Kavindu.png";
-import Naveen from "../assets/media/Naveen.jpeg";
-import Tharinda from "../assets/media/Tharinda.jpg";
-import Hass from "../assets/media/Hass.jpeg";
-import Senitha from "../assets/media/Senitha.jpg";
+// // Media
+// import Gihan from "../assets/media/Gihan.jpeg";
+// import Kavindu from "../assets/media/Kavindu.png";
+// import Naveen from "../assets/media/Naveen.jpeg";
+// import Tharinda from "../assets/media/Tharinda.jpg";
+// import Hass from "../assets/media/Hass.jpeg";
+// import Senitha from "../assets/media/Senitha.jpg";
 
-// Committee
-import Ishan from "../assets/committee/ishan.png";
-import Nithya from "../assets/committee/nithya.jpg";
-import Shanuka from "../assets/committee/shanuka.jpg";
-import Nimeshka from "../assets/committee/Nimeshka.jpg";
-import Dilvan from "../assets/committee/dilvan.jpg";
-import Dulsha from "../assets/committee/dulsha.png";
+// // Committee
+// import Ishan from "../assets/committee/ishan.png";
+// import Nithya from "../assets/committee/nithya.jpg";
+// import Shanuka from "../assets/committee/shanuka.jpg";
+// import Nimeshka from "../assets/committee/Nimeshka.jpg";
+// import Dilvan from "../assets/committee/dilvan.jpg";
+// import Dulsha from "../assets/committee/dulsha.png";
 
 /* ================= COMPONENT ================= */
 
@@ -77,7 +77,7 @@ function Team() {
     president: {
       name: "Chirath Wijesinghe",
       role: "President",
-      image: Chirath,
+      image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781032/Chirath_fchxew.jpg",
     },
     vicePresident: {
       name: "Harshana Prabhath",
@@ -85,33 +85,33 @@ function Team() {
       image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781029/Harshana_iazmut.jpg",
     },
     secretaries: [
-      { name: "Sajini Kaushalya", role: "Joint Secretary", image: Sajini },
-      { name: "Shonali Galpihila", role: "Joint Secretary", image: Shonali },
+      { name: "Sajini Kaushalya", role: "Joint Secretary", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781037/Sajini_xhb9wt.jpg" },
+      { name: "Shonali Galpihila", role: "Joint Secretary", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781034/Shonali_ozq4qo.jpg" },
     ],
   };
 
   const admin = [
-    { name: "Nirodha Madusanka", role: "Junior Treasurer", image: Niroda },
-    { name: "Kavishan M Rathnayaka", role: "HR Team", image: Kavishan },
-    { name: "Dilmi Amanda", role: "HR Team", image: Amanda },
+    { name: "Nirodha Madusanka", role: "Junior Treasurer", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781038/Niroda_yekwcu.jpg" },
+    { name: "Kavishan M Rathnayaka", role: "HR Team", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781033/Kavishan_jlwgqm.jpg" },
+    { name: "Dilmi Amanda", role: "HR Team", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781044/Amanda_cef7lo.jpg"},
   ];
 
   const mediaMarketing = [
-    { name: "Gihan Kaveesha", role: "Director of Media & Marketing", head: true, image: Gihan },
-    { name: "Kavindu Dilshan", role: "Media Unit", image: Kavindu },
-    { name: "Naveen Rasanka", role: "Media Unit", image: Naveen },
-    { name: "Tharinda Gimhana", role: "Media Unit", image: Tharinda },
-    { name: "Hasaranga Kariyawasam", role: "Media Unit", image: Hass },
-    { name: "Senitha Samarasinghe", role: "Media Unit", image: Senitha },
+    { name: "Gihan Kaveesha", role: "Director of Media & Marketing", head: true, image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781347/Gihan_ogjayo.jpg" },
+    { name: "Kavindu Dilshan", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781395/Kavindu_pttnl6.pngKavindu" },
+    { name: "Naveen Rasanka", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781366/Naveen_mpvaot.jpg" },
+    { name: "Tharinda Gimhana", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781364/Tharinda_isehqz.jpg" },
+    { name: "Hasaranga Kariyawasam", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781430/Hass_rnvfeh.jpg" },
+    { name: "Senitha Samarasinghe", role: "Media Unit", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781427/Senitha_zu6uve.jpg" },
   ];
 
   const committee = [
-    { name: "Ishan Sivmal", image: Ishan },
-    { name: "Nithya Madhuhansi", image: Nithya },
-    { name: "Shanuka Saranga", image: Shanuka },
-    { name: "Nimeshka Kumudumali", image: Nimeshka },
-    { name: "Dasindu Dilvan", image: Dilvan },
-    { name: "Dulsha Hemini", image: Dulsha },
+    { name: "Ishan Sivmal", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781560/ishan_ii9ibr.png" },
+    { name: "Nithya Madhuhansi", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781517/nithya_mpkpkb.jpg" },
+    { name: "Shanuka Saranga", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781517/shanuka_uawngw.jpg" },
+    { name: "Nimeshka Kumudumali", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781560/Nimeshka_avt9em.jpg" },
+    { name: "Dasindu Dilvan", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781561/dilvan_wbd04f.jpg" },
+    { name: "Dulsha Hemini", image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781559/dulsha_i35pjn.png" },
   ];
 
   return (
