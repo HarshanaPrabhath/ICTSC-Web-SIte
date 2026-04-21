@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 // Executive
 import Chirath from "../assets/executive/Chirath.jpg";
-import Harshana from "../assets/executive/Harshana.jpg";
+
 import Sajini from "../assets/executive/sajini.jpg";
 import Shonali from "../assets/executive/shonali.jpg";
 import Niroda from "../assets/executive/Niroda.jpg";
@@ -82,7 +82,7 @@ function Team() {
     vicePresident: {
       name: "Harshana Prabhath",
       role: "Vice President",
-      image: Harshana,
+      image: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776781029/Harshana_iazmut.jpg",
     },
     secretaries: [
       { name: "Sajini Kaushalya", role: "Joint Secretary", image: Sajini },
