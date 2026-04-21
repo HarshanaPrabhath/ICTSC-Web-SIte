@@ -10,7 +10,7 @@ function Home() {
       {/* Background Image Layer */}
       <div className="fixed inset-0 z-0">
         <img
-          src={bg}
+          src= "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776780614/bg_mnikcb.jpg"
           alt="Faculty of Technology Background"
           className="w-full h-full object-cover opacity-50"
         />
