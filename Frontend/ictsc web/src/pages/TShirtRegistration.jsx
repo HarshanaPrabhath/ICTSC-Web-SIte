@@ -41,7 +41,7 @@ function TShirtRegistration() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", UPLOAD_PRESET);
-    formData.append("public_id", fileName); // Renames file in Cloudinary
+    formData.append("public_id", fileName);
 
     const response = await fetch(CLOUDINARY_URL, {
       method: "POST",
@@ -53,39 +53,83 @@ function TShirtRegistration() {
     return data.secure_url;
   };
 
+  // --- STRICT VALIDATION LOGIC ---
+  const validateForm = () => {
+    // Helper to remove all whitespace
+    const stripSpaces = (str) => str.replace(/\s+/g, "");
+
+    const cleanFullName = fullName.trim();
+    const cleanTg = stripSpaces(tgNumber).toUpperCase();
+    const cleanContact = stripSpaces(contactNumber);
+    const cleanAmount = stripSpaces(paymentAmount);
+
+    // 1. Check for empty fields (preventing only-space entries)
+    if (!cleanFullName || !cleanTg || !cleanContact || !cleanAmount) {
+      alert("All fields are required and cannot be empty or just spaces!");
+      return false;
+    }
+
+    // 2. TG Number Validation (TG/XXXX/XXXX) - No letters in digits parts
+    // This regex ensures TG/ is followed by 4 digits, then /, then 4 digits.
+    const tgRegex = /^TG\/\d{4}\/\d{4}$/;
+    if (!tgRegex.test(cleanTg)) {
+      alert("Invalid TG Number! Must be exactly TG/XXXX/XXXX (e.g., TG/2023/1753) with no letters in numeric parts.");
+      return false;
+    }
+
+    // 3. Contact Number Validation (Exactly 10 digits, no letters/spaces)
+    const contactRegex = /^\d{10}$/;
+    if (!contactRegex.test(cleanContact)) {
+      alert("Contact number must be exactly 10 digits (e.g., 0761234567) with no spaces.");
+      return false;
+    }
+
+    // 4. Amount Validation
+    if (isNaN(cleanAmount) || parseFloat(cleanAmount) <= 0) {
+      alert("Please enter a valid numeric payment amount without spaces.");
+      return false;
+    }
+
+    // 5. Receipt Validation
+    if (!receiptImage) {
+      alert("Please upload your payment receipt!");
+      return false;
+    }
+
+    return { cleanFullName, cleanTg, cleanContact, cleanAmount };
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!receiptImage) return alert("Please upload your payment receipt!");
+
+    const validatedData = validateForm();
+    if (!validatedData) return;
 
     setLoading(true);
 
     try {
-      // 1. Generate Reference Number FIRST
       const coll = collection(db, "registrations");
       const snapshot = await getCountFromServer(coll);
       const nextCount = snapshot.data().count + 1;
       const refId = `ICTSC-TSHIRT-${nextCount.toString().padStart(4, "0")}`;
 
-      // 2. Upload Image renamed as the Reference ID
       const imageUrl = await uploadToCloudinary(receiptImage, refId);
 
-      // 3. Save to Firebase
       await addDoc(coll, {
         referenceId: refId,
-        fullName,
-        tgNumber,
-        contactNumber,
+        fullName: validatedData.cleanFullName,
+        tgNumber: validatedData.cleanTg,
+        contactNumber: validatedData.cleanContact,
         department: selectedDept,
         size: selectedSize,
         quantity,
-        paidAmount: parseFloat(paymentAmount),
+        paidAmount: parseFloat(validatedData.cleanAmount),
         receiptUrl: imageUrl,
         status: "pending_verification",
         createdAt: serverTimestamp(),
       });
 
-      // 4. Success Actions (No WhatsApp redirect)
-      alert(`Registration Successful! Your Reference ID is: ${refId}`);
+      alert(`Registration Successful! Reference ID: ${refId}`);
 
       // Reset Form
       setFullName("");
@@ -116,7 +160,7 @@ function TShirtRegistration() {
                   Official Merchandise
                 </span>
               </div>
-              <h2 className="text-5xl font-black  tracking-tighter uppercase mb-2 leading-none">
+              <h2 className="text-5xl font-black tracking-tighter uppercase mb-2 leading-none">
                 T-Shirt <span className="text-blue-500">Release</span>
               </h2>
             </div>
@@ -131,41 +175,23 @@ function TShirtRegistration() {
 
             <div className="flex gap-4">
               <div className="flex-1 bg-white/5 border border-white/10 rounded-2xl p-5 text-center">
-                <p className="text-[10px] text-gray-500 uppercase font-bold mb-2">
-                  Price
-                </p>
+                <p className="text-[10px] text-gray-500 uppercase font-bold mb-2">Price</p>
                 <p className="text-2xl font-black ">1,600 LKR</p>
               </div>
               <div className="flex-1 bg-blue-600 rounded-2xl p-5 text-center">
-                <p className="text-blue-100 text-[10px] uppercase font-bold mb-2">
-                  Deadline
-                </p>
+                <p className="text-blue-100 text-[10px] uppercase font-bold mb-2">Deadline</p>
                 <p className="text-2xl font-black ">APRIL 30</p>
               </div>
             </div>
 
-            {/* Contact Support Info Section */}
             <div className="p-6 rounded-3xl bg-white/5 border border-white/10 flex items-center gap-5">
               <div className="w-12 h-12 rounded-2xl bg-blue-500/20 flex items-center justify-center text-blue-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  strokeWidth={2}
-                  stroke="currentColor"
-                  className="w-6 h-6"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"
-                  />
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
                 </svg>
               </div>
               <div>
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
-                  For more details - Nirodha
-                </p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Support - Nirodha</p>
                 <p className="text-xl font-black text-white">076 254 0108</p>
               </div>
             </div>
@@ -175,14 +201,10 @@ function TShirtRegistration() {
           <div className="bg-white/[0.02] border border-white/10 rounded-[2.5rem] p-8 md:p-12 backdrop-blur-3xl">
             <form className="space-y-8" onSubmit={handleSubmit}>
               <div className="space-y-6">
-                <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500/80">
-                  Student Details
-                </h4>
+                <h4 className="text-xs font-black uppercase tracking-[0.3em] text-blue-500/80">Student Details</h4>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Full Name
-                  </label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Full Name</label>
                   <input
                     type="text"
                     placeholder="e.g. K.M.Nimal Abeysundara"
@@ -195,28 +217,25 @@ function TShirtRegistration() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                      TG Number
-                    </label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">TG Number</label>
                     <input
                       type="text"
-                      placeholder="e.g. TG/20XX/XXXX"
+                      placeholder="TG/XXXX/XXXX"
                       required
                       value={tgNumber}
-                      onChange={(e) => setTgNumber(e.target.value)}
+                      onChange={(e) => setTgNumber(e.target.value.replace(/\s/g, ""))}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-blue-500 outline-none transition-all text-white font-mono"
                     />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                      Contact Number
-                    </label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Contact Number</label>
                     <input
-                      type="tel"
-                      placeholder="e.g. 076 123 4568"
+                      type="text"
+                      maxLength="10"
+                      placeholder="0761234567"
                       required
                       value={contactNumber}
-                      onChange={(e) => setContactNumber(e.target.value)}
+                      onChange={(e) => setContactNumber(e.target.value.replace(/\D/g, ""))}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-blue-500 outline-none transition-all text-white font-mono"
                     />
                   </div>
@@ -224,9 +243,7 @@ function TShirtRegistration() {
               </div>
 
               <div className="space-y-4">
-                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                  Select Department
-                </label>
+                <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Department</label>
                 <div className="grid grid-cols-3 gap-3">
                   {departments.map((dept) => (
                     <button
@@ -243,9 +260,7 @@ function TShirtRegistration() {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div className="space-y-4">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Size
-                  </label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Size</label>
                   <div className="grid grid-cols-4 gap-2">
                     {sizes.map((size) => (
                       <button
@@ -261,52 +276,35 @@ function TShirtRegistration() {
                 </div>
 
                 <div className="space-y-4">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Quantity
-                  </label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Quantity</label>
                   <div className="flex items-center bg-white/5 border border-white/10 rounded-xl p-1 justify-between h-[52px]">
-                    <button
-                      type="button"
-                      onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                      className="w-10 h-10 text-xl font-bold"
-                    >
-                      -
-                    </button>
+                    <button type="button" onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 text-xl font-bold">-</button>
                     <span className="font-bold text-lg">{quantity}</span>
-                    <button
-                      type="button"
-                      onClick={() => setQuantity(quantity + 1)}
-                      className="w-10 h-10 text-xl font-bold"
-                    >
-                      +
-                    </button>
+                    <button type="button" onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 text-xl font-bold">+</button>
                   </div>
                 </div>
               </div>
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Payment Amount (LKR)
-                  </label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Amount (LKR)</label>
                   <input
-                    type="number"
+                    type="text"
                     required
                     value={paymentAmount}
-                    onChange={(e) => setPaymentAmount(e.target.value)}
-                    placeholder="Advance Paid"
+                    onChange={(e) => setPaymentAmount(e.target.value.replace(/\D/g, ""))}
+                    placeholder="Amount Paid"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-blue-500 outline-none transition-all text-white"
                   />
                 </div>
 
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">
-                    Upload Receipt File
-                  </label>
+                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Receipt File</label>
                   <input
                     type="file"
                     required
                     onChange={handleFileChange}
+                    accept="image/*"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-gray-500 file:bg-blue-600 file:text-white file:border-0 file:px-4 file:py-1 file:rounded-lg file:mr-4 file:font-bold hover:file:bg-blue-500 transition-all cursor-pointer"
                   />
                 </div>
@@ -317,7 +315,7 @@ function TShirtRegistration() {
                 disabled={loading}
                 className="w-full bg-blue-600 hover:bg-blue-500 py-5 rounded-2xl font-black uppercase tracking-[0.2em] transition-all disabled:opacity-50"
               >
-                {loading ? "Processing Upload..." : "Register Now"}
+                {loading ? "Processing..." : "Register Now"}
               </button>
             </form>
           </div>
