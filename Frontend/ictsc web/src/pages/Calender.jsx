@@ -7,13 +7,13 @@ function EventDisplay({ event }) {
   const { date, month, year, title, info, responsible_party } = event;
 
   return (
-    <div className="relative group overflow-hidden">
-      {/* Glow Effect on Hover - Updated to Blue/Cyan */}
+    <div className="relative group overflow-hidden transition-all duration-500">
+      {/* Glow Effect on Hover */}
       <div className="absolute -inset-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-3xl blur opacity-0 group-hover:opacity-20 transition duration-500"></div>
       
-      <div className="relative flex flex-col md:flex-row items-start md:items-center bg-[#0f172a]/80 border border-white/10 rounded-3xl p-8 backdrop-blur-2xl">
+      <div className="relative flex flex-col md:flex-row items-start md:items-center bg-[#0f172a]/80 border border-white/10 rounded-3xl p-8 backdrop-blur-2xl transition-all group-hover:border-white/20">
         
-        {/* Date Section - Cyan Accent */}
+        {/* Date Section */}
         <div className="flex flex-col mb-4 md:mb-0 md:mr-10 border-l-2 border-cyan-500 pl-6 shrink-0">
           <span className="text-4xl font-black text-white tracking-tighter">{date}</span>
           <span className="text-cyan-400 font-bold uppercase tracking-[0.2em] text-xs">{month} {year}</span>
@@ -22,7 +22,6 @@ function EventDisplay({ event }) {
         {/* Content Section */}
         <div className="flex-grow">
           <div className="flex flex-wrap items-center gap-3 mb-3">
-            {/* Responsible Person Section */}
             <div className="flex items-center gap-2.5 px-4 py-1.5 rounded-xl bg-white/5 border border-white/10 group-hover:border-cyan-500/30 transition-colors">
               <div className="size-2 rounded-full bg-cyan-500 shadow-[0_0_10px_rgba(34,211,238,0.5)]"></div>
               <p className="text-[10px] font-bold text-gray-300 uppercase tracking-widest">
@@ -40,7 +39,7 @@ function EventDisplay({ event }) {
           </p>
         </div>
 
-        {/* Decorative Element - Cyan hover */}
+        {/* Decorative Element */}
         <div className="hidden md:block ml-4">
           <div className="flex gap-1">
             {[1, 2, 3].map((i) => (
@@ -59,38 +58,38 @@ function Calender() {
   const events = [
     {
       id: "ev_2026_001",
-      date: "14",
-      month: "MAR",
+      date: "12",
+      month: "APR",
       year: "2026",
-      title: "Quarterly Strategy Summit",
-      info: "An intensive session focused on aligning committee goals for the upcoming semester and finalizing the annual roadmap.",
+      title: "Official Website Development",
+      info: "Phase 1 launch of the ICTSC community portal. Testing core modules including event registration and the resource repository.",
       responsible_party: {
-        name: "Alex Rivers",
-        designation: "President / Lead Strategist"
+        name: "Dev Team Lead",
+        designation: "Web Master"
       }
     },
     {
       id: "ev_2026_002",
-      date: "22",
-      month: "MAR",
+      date: "29",
+      month: "APR ",
       year: "2026",
-      title: "Visual Identity Overhaul",
-      info: "The creative department will be presenting the new brand guidelines and digital asset kits for all upcoming campaigns.",
+      title: "School Empowering Program",
+      info: "Outreach program at Southern Region Schools to provide hands-on ICT training and distribute educational resources.",
       responsible_party: {
-        name: "Sarah Chen",
-        designation: "Media Head"
+        name: "Outreach Coordinator",
+        designation: "Community Lead"
       }
     },
     {
       id: "ev_2026_003",
-      date: "05",
-      month: "APR",
+      date: "10",
+      month: "MAY",
       year: "2026",
-      title: "Community Outreach Gala",
-      info: "A flagship networking event designed to connect our leadership board with local community stakeholders.",
+      title: "ICTSC T-Shirt Releasing",
+      info: "Distributing the official 2026 club apparel to all registered members at the faculty premises.",
       responsible_party: {
-        name: "James Holden",
-        designation: "Operations Director"
+        name: "Marketing Head",
+        designation: "Branding Lead"
       }
     }
   ];
@@ -137,7 +136,7 @@ function Calender() {
           </div>
         </section>
       </div>
-       <Footer />
+      <Footer />
     </div>
   );
 }

@@ -74,47 +74,50 @@ function ProgramCard({ program }) {
 
 // 2. Main Page
 function Project() {
-  const programs = [
-    {
-      id: "evt_001",
-      title: "School Empowering Program",
-      date: "05 MAR 2026",
-      location: "Southern Region Schools",
-      image_url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
-      description: "An outreach initiative designed to empower rural school students with modern ICT tools. We provided hands-on training in coding basics and hardware maintenance to inspire the next generation of tech leaders.",
-      tags: ["Empowerment", "Outreach", "ICT"],
-      metadata: {
-        duration: "06 Hours",
-        type: "Community Service"
-      }
-    },
-    {
-      id: "evt_002",
-      title: "Tech Awareness Workshop",
-      date: "15 FEB 2026",
-      location: "Main Assembly Hall",
-      image_url: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=800&q=80",
-      description: "A comprehensive session for university freshmen covering cybersecurity and digital citizenship. Detailed curriculum analysis and engagement metrics are included in this report.",
-      tags: ["Education", "Security"],
-      metadata: {
-        duration: "03 Hours",
-        type: "Workshop"
-      }
-    },
-    {
-      id: "evt_003",
-      title: "Sports Day Coverage",
-      date: "20 JAN 2026",
-      location: "University Grounds",
-      image_url: "https://images.unsplash.com/photo-1504450758481-7338eba7524a?auto=format&fit=crop&w=800&q=80",
-      description: "Official media coverage report for the Annual Sports Meet. Includes technical setup for live streaming and social media reach statistics.",
-      tags: ["Media", "Live"],
-      metadata: {
-        duration: "Full Day",
-        type: "Field Work"
-      }
+const programs = [
+  {
+    id: "evt_001",
+    title: "School Empowering Program",
+    date: "29 MAY 2026",
+    location: "Southern Region Schools",
+    // Fixed: High-quality school/education image from Unsplash
+    image_url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=1200&auto=format&fit=crop",
+    description: "An outreach initiative designed to empower rural school students with modern ICT tools. We provided hands-on training in coding basics and hardware maintenance to inspire the next generation of tech leaders.",
+    tags: ["Empowerment", "Outreach", "ICT"],
+    metadata: {
+      duration: "04 Hours",
+      type: "Community Service"
     }
-  ];
+  },
+  {
+    id: "evt_002",
+    title: "Official Website Development",
+    date: "12 APR 2026",
+    location: "ICTSC Tech Hub",
+    // Fixed: Modern code/web development image
+    image_url: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1200&auto=format&fit=crop",
+    description: "The internal development phase for the new ICTSC community portal. This project involves building a responsive, modern platform using React and Tailwind CSS to manage student resources and events.",
+    tags: ["Web Dev", "React", "Tech"],
+    metadata: {
+      duration: "Ongoing",
+      type: "Technical Project"
+    }
+  },  
+  {
+    id: "evt_003",
+    title: "ICTSC T-Shirt Releasing",
+    date: "10 May 2026",
+    location: "Faculty Premises",
+    // Fixed: Clothing/Merchandise branding image
+    image_url: "https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?q=80&w=1200&auto=format&fit=crop",
+    description: "The official launch of the ICT Student Club branded apparel. A community event designed to foster team spirit, club identity, and professional branding among the faculty technology students.",
+    tags: ["Merchandise", "Community", "Branding"],
+    metadata: {
+      duration: "ONE WEEK ",
+      type: "Social Event"
+    }
+  }
+];
 
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
