@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
+import bg from "../assets/bg.jpg" ;
 
 function Home() {
   return (
@@ -9,7 +10,7 @@ function Home() {
       {/* Background Image Layer */}
       <div className="fixed inset-0 z-0">
         <img
-          src="src/assets/495134092_1265069908951961_8508488428443727747_n.jpg"
+          src={bg}
           alt="Faculty of Technology Background"
           className="w-full h-full object-cover opacity-50"
         />
