@@ -71,7 +71,7 @@ function Home() {
               >
                 <span className="relative flex items-center gap-2 uppercase tracking-[0.2em] text-[10px]">
                   <span className="size-1.5 rounded-full bg-cyan-300 animate-ping"></span>
-                  Registration Open
+                  T-Shirt  Registration Open
                 </span>
               </Link>
             </div>
