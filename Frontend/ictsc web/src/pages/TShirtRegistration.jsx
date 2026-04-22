@@ -214,7 +214,7 @@ function TShirtRegistration() {
 
             <div className="bg-white/5 border border-white/10 rounded-[2.5rem] aspect-square flex items-center justify-center overflow-hidden">
               <img
-                src="https://res.cloudinary.com/dj53zp0gg/image/upload/v1776784164/tshirt_bxsduw.jpg"
+                src="https://res.cloudinary.com/dj53zp0gg/image/upload/v1776846152/ictsc-shirt-shirt-post-final-5.jpg_ko3nhd.jpg"
                 alt="T-Shirt"
                 className="w-4/5 object-contain drop-shadow-2xl"
               />

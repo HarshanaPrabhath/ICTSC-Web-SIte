@@ -37,6 +37,51 @@ function AdminDashboard() {
     }
   };
 
+  const downloadCSV = () => {
+  if (!registrations.length) {
+    alert("No data to export");
+    return;
+  }
+
+  const headers = [
+    "Reference ID",
+    "Full Name",
+    "Telegram Number",
+    "Size",
+    "Quantity",
+    "Paid Amount",
+    "Status",
+    "Receipt URL",
+    "Created At"
+  ];
+
+  const rows = registrations.map(reg => [
+    reg.referenceId || "",
+    reg.fullName || "",
+    reg.tgNumber || "",
+    reg.size || "",
+    reg.quantity || "",
+    reg.paidAmount || 0,
+    reg.status || "",
+    reg.receiptUrl || "",
+    reg.createdAt?.toDate ? reg.createdAt.toDate().toISOString() : ""
+  ]);
+
+  let csvContent =
+    "data:text/csv;charset=utf-8," +
+    [headers, ...rows]
+      .map(e => e.map(v => `"${v}"`).join(","))
+      .join("\n");
+
+  const encodedUri = encodeURI(csvContent);
+  const link = document.createElement("a");
+  link.setAttribute("href", encodedUri);
+  link.setAttribute("download", `firestore_backup_${Date.now()}.csv`);
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
   const filteredRegistrations = registrations.filter((reg) =>
     (reg.referenceId && reg.referenceId.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (reg.tgNumber && reg.tgNumber.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -59,6 +104,7 @@ function AdminDashboard() {
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
+      
         
         {/* STATS & SEARCH HEADER */}
         <div className="flex flex-col gap-6 mb-10">
@@ -72,6 +118,7 @@ function AdminDashboard() {
                 <h2 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-green-500">Rs. {totalRevenue.toLocaleString()}</h2>
                 <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Revenue Collected</p>
               </div>
+              
             </div>
             <input 
               type="text" 
@@ -80,7 +127,14 @@ function AdminDashboard() {
               onChange={(e) => setSearchTerm(e.target.value)} 
               className="w-full md:w-80 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-blue-500 transition-all" 
             />
+            <button
+  onClick={downloadCSV}
+  className="bg-green-600 px-5 py-3 rounded-xl text-xs font-black uppercase hover:bg-green-500 transition-all"
+>
+  Backup  
+</button> 
           </div>
+          
         </div>
 
         {/* MOBILE CARD VIEW (Visible only on small screens) */}
