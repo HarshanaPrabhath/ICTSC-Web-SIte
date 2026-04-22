@@ -32,30 +32,59 @@ function TShirtRegistration() {
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
   const handleFileChange = (e) => {
-    if (e.target.files[0]) {
-      setReceiptImage(e.target.files[0]);
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    // ✅ Size validation (Safari stability)
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image too large. Please upload under 5MB.");
+      return;
     }
+
+    setReceiptImage(file);
   };
 
   const uploadToCloudinary = async (file, fileName) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", UPLOAD_PRESET);
-    formData.append("public_id", fileName);
+    try {
+      const formData = new FormData();
 
-    const response = await fetch(CLOUDINARY_URL, {
-      method: "POST",
-      body: formData,
-    });
+      // ✅ Correct way (important for Safari)
+      formData.append("file", file, file.name);
+      formData.append("upload_preset", UPLOAD_PRESET);
+      formData.append("public_id", fileName);
 
-    const data = await response.json();
-    if (data.error) throw new Error(data.error.message);
-    return data.secure_url;
+      const response = await fetch(CLOUDINARY_URL, {
+        method: "POST",
+        body: formData,
+        mode: "cors",
+      });
+
+      // ✅ Safari sometimes fails silently
+      if (!response.ok) {
+        throw new Error("Upload failed. Please try again.");
+      }
+
+      const data = await response.json();
+
+      if (data.error) {
+        throw new Error(data.error.message);
+      }
+
+      return data.secure_url;
+
+    } catch (error) {
+      console.error("Cloudinary Upload Error:", error);
+
+      // ✅ User-friendly alert
+      alert("Receipt upload failed! Please try again or use a different image.");
+
+      return null;
+    }
   };
 
-  // --- STRICT VALIDATION LOGIC ---
+  // --- VALIDATION ---
   const validateForm = () => {
-    // Helper to remove all whitespace
     const stripSpaces = (str) => str.replace(/\s+/g, "");
 
     const cleanFullName = fullName.trim();
@@ -63,36 +92,30 @@ function TShirtRegistration() {
     const cleanContact = stripSpaces(contactNumber);
     const cleanAmount = stripSpaces(paymentAmount);
 
-    // 1. Check for empty fields (preventing only-space entries)
     if (!cleanFullName || !cleanTg || !cleanContact || !cleanAmount) {
-      alert("All fields are required and cannot be empty or just spaces!");
+      alert("All fields are required!");
       return false;
     }
 
-    // 2. TG Number Validation (TG/XXXX/XXXX) - No letters in digits parts
-    // This regex ensures TG/ is followed by 4 digits, then /, then 4 digits.
     const tgRegex = /^TG\/\d{4}\/\d{4}$/;
     if (!tgRegex.test(cleanTg)) {
-      alert("Invalid TG Number! Must be exactly TG/XXXX/XXXX (e.g., TG/2023/1753) with no letters in numeric parts.");
+      alert("Invalid TG Number!");
       return false;
     }
 
-    // 3. Contact Number Validation (Exactly 10 digits, no letters/spaces)
     const contactRegex = /^\d{10}$/;
     if (!contactRegex.test(cleanContact)) {
-      alert("Contact number must be exactly 10 digits (e.g., 0761234567) with no spaces.");
+      alert("Invalid contact number!");
       return false;
     }
 
-    // 4. Amount Validation
     if (isNaN(cleanAmount) || parseFloat(cleanAmount) <= 0) {
-      alert("Please enter a valid numeric payment amount without spaces.");
+      alert("Invalid amount!");
       return false;
     }
 
-    // 5. Receipt Validation
     if (!receiptImage) {
-      alert("Please upload your payment receipt!");
+      alert("Please upload your receipt!");
       return false;
     }
 
@@ -113,7 +136,14 @@ function TShirtRegistration() {
       const nextCount = snapshot.data().count + 1;
       const refId = `ICTSC-TSHIRT-${nextCount.toString().padStart(4, "0")}`;
 
+      // ✅ Upload first
       const imageUrl = await uploadToCloudinary(receiptImage, refId);
+
+      // ❗ Stop if upload failed
+      if (!imageUrl) {
+        setLoading(false);
+        return;
+      }
 
       await addDoc(coll, {
         referenceId: refId,
@@ -131,13 +161,14 @@ function TShirtRegistration() {
 
       alert(`Registration Successful! Reference ID: ${refId}`);
 
-      // Reset Form
+      // Reset
       setFullName("");
       setTgNumber("");
       setContactNumber("");
       setPaymentAmount("");
       setReceiptImage(null);
       e.target.reset();
+
     } catch (error) {
       console.error(error);
       alert("Error: " + error.message);
@@ -145,7 +176,6 @@ function TShirtRegistration() {
       setLoading(false);
     }
   };
-
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
       <Navbar />
