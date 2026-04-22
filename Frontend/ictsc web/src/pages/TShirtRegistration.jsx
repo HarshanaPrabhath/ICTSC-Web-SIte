@@ -2,17 +2,17 @@ import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
-// FIREBASE IMPORTS
+// FIREBASE
 import { db } from "../firebaseConfig";
 import {
   collection,
   addDoc,
   serverTimestamp,
-  getCountFromServer,
+  runTransaction,
+  doc,
 } from "firebase/firestore";
 
 function TShirtRegistration() {
-  // FORM STATES
   const [fullName, setFullName] = useState("");
   const [tgNumber, setTgNumber] = useState("");
   const [contactNumber, setContactNumber] = useState("");
@@ -23,7 +23,6 @@ function TShirtRegistration() {
   const [receiptImage, setReceiptImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  // SETTINGS
   const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
   const UPLOAD_PRESET = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET;
   const CLOUDINARY_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/auto/upload`;
@@ -31,12 +30,41 @@ function TShirtRegistration() {
   const departments = ["ICT", "ET", "BST"];
   const sizes = ["XS", "S", "M", "L", "XL", "2XL", "3XL"];
 
+  // ✅ CRYPTO RANDOM 12 DIGIT
+  const generateCryptoNumber = () => {
+    const array = new Uint32Array(1);
+    window.crypto.getRandomValues(array);
+    return array[0].toString().slice(0, 12);
+  };
+
+  // ✅ SAFE COUNTER + RANDOM COMBINED
+  const generateReferenceId = async () => {
+    const counterRef = doc(db, "counters", "tshirt");
+
+    const newRefId = await runTransaction(db, async (transaction) => {
+      const counterDoc = await transaction.get(counterRef);
+
+      let newCount = 1;
+
+      if (counterDoc.exists()) {
+        newCount = counterDoc.data().count + 1;
+      }
+
+      transaction.set(counterRef, { count: newCount });
+
+      const padded = newCount.toString().padStart(4, "0");
+      const randomPart = generateCryptoNumber();
+
+      return `ICTSC-TSHIRT-${padded}-${randomPart}`;
+    });
+
+    return newRefId;
+  };
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-
     if (!file) return;
 
-    // ✅ Size validation (Safari stability)
     if (file.size > 5 * 1024 * 1024) {
       alert("Image too large. Please upload under 5MB.");
       return;
@@ -49,10 +77,12 @@ function TShirtRegistration() {
     try {
       const formData = new FormData();
 
-      // ✅ Correct way (important for Safari)
+      // ✅ UNIQUE NAME ALWAYS
+      const uniqueFileName = `${fileName}-${Date.now()}`;
+
       formData.append("file", file, file.name);
       formData.append("upload_preset", UPLOAD_PRESET);
-      formData.append("public_id", fileName);
+      formData.append("public_id", uniqueFileName);
 
       const response = await fetch(CLOUDINARY_URL, {
         method: "POST",
@@ -60,30 +90,20 @@ function TShirtRegistration() {
         mode: "cors",
       });
 
-      // ✅ Safari sometimes fails silently
-      if (!response.ok) {
-        throw new Error("Upload failed. Please try again.");
-      }
+      if (!response.ok) throw new Error("Upload failed");
 
       const data = await response.json();
-
-      if (data.error) {
-        throw new Error(data.error.message);
-      }
+      if (data.error) throw new Error(data.error.message);
 
       return data.secure_url;
 
     } catch (error) {
-      console.error("Cloudinary Upload Error:", error);
-
-      // ✅ User-friendly alert
-      alert("Receipt upload failed! Please try again or use a different image.");
-
+      console.error(error);
+      alert("Receipt upload failed! Try again.");
       return null;
     }
   };
 
-  // --- VALIDATION ---
   const validateForm = () => {
     const stripSpaces = (str) => str.replace(/\s+/g, "");
 
@@ -115,7 +135,7 @@ function TShirtRegistration() {
     }
 
     if (!receiptImage) {
-      alert("Please upload your receipt!");
+      alert("Upload receipt!");
       return false;
     }
 
@@ -131,21 +151,19 @@ function TShirtRegistration() {
     setLoading(true);
 
     try {
-      const coll = collection(db, "registrations");
-      const snapshot = await getCountFromServer(coll);
-      const nextCount = snapshot.data().count + 1;
-      const refId = `ICTSC-TSHIRT-${nextCount.toString().padStart(4, "0")}`;
+      // ✅ SAFE UNIQUE ID
+      const refId = await generateReferenceId();
 
       // ✅ Upload first
       const imageUrl = await uploadToCloudinary(receiptImage, refId);
 
-      // ❗ Stop if upload failed
       if (!imageUrl) {
         setLoading(false);
         return;
       }
 
-      await addDoc(coll, {
+      // ✅ Save
+      await addDoc(collection(db, "registrations"), {
         referenceId: refId,
         fullName: validatedData.cleanFullName,
         tgNumber: validatedData.cleanTg,
@@ -159,9 +177,8 @@ function TShirtRegistration() {
         createdAt: serverTimestamp(),
       });
 
-      alert(`Registration Successful! Reference ID: ${refId}`);
+      alert(`Registration Successful! ID: ${refId}`);
 
-      // Reset
       setFullName("");
       setTgNumber("");
       setContactNumber("");
