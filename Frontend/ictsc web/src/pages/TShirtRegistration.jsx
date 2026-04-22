@@ -119,23 +119,25 @@ function TShirtRegistration() {
 
     const tgRegex = /^TG\/\d{4}\/\d{4}$/;
     if (!tgRegex.test(cleanTg)) {
-      alert("Invalid TG Number!");
+      alert("Invalid TG Number! Use format: TG/2022/1234");
       return false;
     }
 
     const contactRegex = /^\d{10}$/;
     if (!contactRegex.test(cleanContact)) {
-      alert("Invalid contact number!");
+      alert("Invalid contact number! Please enter 10 digits.");
       return false;
     }
 
-    if (isNaN(cleanAmount) || parseFloat(cleanAmount) <= 0) {
-      alert("Invalid amount!");
+    // ✅ VALIDATE MINIMUM PAYMENT (1000 LKR)
+    const amountVal = parseFloat(cleanAmount);
+    if (isNaN(amountVal) || amountVal < 1000) {
+      alert("Minimum initial payment accepted is 1,000 LKR.");
       return false;
     }
 
     if (!receiptImage) {
-      alert("Upload receipt!");
+      alert("Please upload your payment receipt!");
       return false;
     }
 
@@ -193,6 +195,7 @@ function TShirtRegistration() {
       setLoading(false);
     }
   };
+
   return (
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
       <Navbar />
@@ -334,7 +337,10 @@ function TShirtRegistration() {
 
               <div className="space-y-6">
                 <div className="space-y-2">
-                  <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Amount (LKR)</label>
+                  <div className="flex justify-between items-center ml-1">
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">Amount (LKR)</label>
+                    <span className="text-[9px] font-bold text-blue-400 uppercase tracking-tighter">Min: 1,000 LKR</span>
+                  </div>
                   <input
                     type="text"
                     required
