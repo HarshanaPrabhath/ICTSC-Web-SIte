@@ -10,7 +10,7 @@ function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const ADMIN_PASSWORD = "ict2026"; 
+  const ADMIN_PASSWORD = "circle#2026"; 
 
   useEffect(() => {
     if (!isAuthenticated) return;
