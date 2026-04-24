@@ -93,7 +93,7 @@ const programs = [
   {
     id: "evt_003",
     title: "ICTSC T-Shirt Releasing",
-    date: "10 May 2026",
+    date: "23 APR 2026",
     location: "Faculty Premises",
     // Fixed: Clothing/Merchandise branding image
     image_url: "https://res.cloudinary.com/dj53zp0gg/image/upload/v1776791001/copy_of_whatsapp_image_2026-04-21_at_182503_rg5omt_4eb41b.jpg",

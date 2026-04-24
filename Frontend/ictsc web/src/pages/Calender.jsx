@@ -71,8 +71,8 @@ function Calender() {
     
     {
       id: "ev_2026_003",
-      date: "10",
-      month: "MAY",
+      date: "23",
+      month: "APR",
       year: "2026",
       title: "ICTSC T-Shirt Releasing",
       info: "Distributing the official 2026 club apparel to all registered members at the faculty premises.",

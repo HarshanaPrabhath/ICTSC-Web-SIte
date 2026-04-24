@@ -357,7 +357,7 @@ function TShirtRegistration() {
                     type="file"
                     required
                     onChange={handleFileChange}
-                    accept="image/*"
+                   accept="image/*,application/pdf"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-gray-500 file:bg-blue-600 file:text-white file:border-0 file:px-4 file:py-1 file:rounded-lg file:mr-4 file:font-bold hover:file:bg-blue-500 transition-all cursor-pointer"
                   />
                 </div>
