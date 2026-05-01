@@ -104,6 +104,14 @@ function TShirtRegistration() {
     }
   };
 
+  // ✅ Validates TG number (TG/XXXX/XXXX) OR NIC (12 digits OR 9 digits + V/v)
+  const validateIdNumber = (value) => {
+    const tgRegex = /^TG\/\d{4}\/\d{4}$/;
+    const nic12Regex = /^\d{12}$/;
+    const nic9Regex = /^\d{9}[Vv]$/;
+    return tgRegex.test(value) || nic12Regex.test(value) || nic9Regex.test(value);
+  };
+
   const validateForm = () => {
     const stripSpaces = (str) => str.replace(/\s+/g, "");
 
@@ -117,9 +125,9 @@ function TShirtRegistration() {
       return false;
     }
 
-    const tgRegex = /^TG\/\d{4}\/\d{4}$/;
-    if (!tgRegex.test(cleanTg)) {
-      alert("Invalid TG Number! Use format: TG/2022/1234");
+    // ✅ TG or NIC validation
+    if (!validateIdNumber(cleanTg)) {
+      alert("Invalid ID! Enter TG Number (TG/2022/1234) or NIC (199912345678 or 991234567V)");
       return false;
     }
 
@@ -266,16 +274,18 @@ function TShirtRegistration() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* ── UPDATED: TG Number or NIC ── */}
                   <div className="space-y-2">
-                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">TG Number</label>
+                    <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">TG Number / NIC</label>
                     <input
                       type="text"
-                      placeholder="TG/XXXX/XXXX"
+                      placeholder="TG/XXXX/XXXX or NIC"
                       required
                       value={tgNumber}
                       onChange={(e) => setTgNumber(e.target.value.replace(/\s/g, ""))}
                       className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-4 focus:border-blue-500 outline-none transition-all text-white font-mono"
                     />
+                    <p className="text-[9px] text-gray-600 ml-1">TG/2022/1234 · 199912345678 · 991234567V</p>
                   </div>
                   <div className="space-y-2">
                     <label className="text-[10px] font-bold text-gray-400 uppercase tracking-widest ml-1">Contact Number</label>
@@ -357,7 +367,7 @@ function TShirtRegistration() {
                     type="file"
                     required
                     onChange={handleFileChange}
-                   accept="image/*,application/pdf"
+                    accept="image/*,application/pdf"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-5 py-3 text-sm text-gray-500 file:bg-blue-600 file:text-white file:border-0 file:px-4 file:py-1 file:rounded-lg file:mr-4 file:font-bold hover:file:bg-blue-500 transition-all cursor-pointer"
                   />
                 </div>

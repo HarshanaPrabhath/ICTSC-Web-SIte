@@ -112,7 +112,7 @@ function AdminDashboard() {
             <div className="flex flex-wrap gap-6 md:gap-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter">Order <span className="text-blue-500">Database</span></h2>
-                <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Total: {registrations.length} Orders</p>
+            <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Total: {registrations.reduce((acc, reg) => acc + (reg.quantity || 0), 0)} T-Shirts</p>
               </div>
               <div className="md:border-l md:border-white/10 md:pl-8">
                 <h2 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-green-500">Rs. {totalRevenue.toLocaleString()}</h2>
