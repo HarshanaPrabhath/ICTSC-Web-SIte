@@ -230,7 +230,7 @@ function TShirtRegistration() {
               </div>
               <div className="flex-1 bg-blue-600 rounded-2xl p-5 text-center">
                 <p className="text-blue-100 text-[10px] uppercase font-bold mb-2">Deadline</p>
-                <p className="text-2xl font-black ">APRIL 30</p>
+                <p className="text-2xl font-black ">MAY 05</p>
               </div>
             </div>
 
