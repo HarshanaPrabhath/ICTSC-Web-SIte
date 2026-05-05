@@ -75,6 +75,20 @@ function ProgramCard({ program }) {
 // 2. Main Page
 function Project() {
 const programs = [
+  {
+  "id": "evt_004",
+  "title": "School AI Awareness Session",
+  "date": "06 MAY 2026",
+  "location": "Main School Auditorium",
+  "image_url": "https://images.pexels.com/photos/18506744/pexels-photo-18506744.jpeg",
+  "description": "An interactive session designed for students to explore the world of Artificial Intelligence. Learn how AI works, its impact on the future of careers, and how to use it responsibly in your studies.",
+  "tags": ["AI Education", "Student Workshop", "Future Ready"],
+  "metadata": {
+    "duration": "2 HOURS",
+    "type": "Educational Workshop",
+    "target_audience": "Grade 10 - Grade 13 Students"
+  }
+},
  
   {
     id: "evt_002",
