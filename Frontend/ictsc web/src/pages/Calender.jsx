@@ -56,6 +56,18 @@ function EventDisplay({ event }) {
 // 2. Main Page Component
 function Calender() {
   const events = [
+      {
+      id: "ev_2026_004",
+      date: "06",
+      month: "MAY",
+      year: "2026",
+      title: "School AI Awareness Session",
+      info: "An interactive session designed for students to explore the world of Artificial Intelligence.",
+      responsible_party: {
+        name: "ICTSC Team",
+        designation: "FOT Members"
+      }
+    },
     {
       id: "ev_2026_001",
       date: "12",
@@ -68,6 +80,7 @@ function Calender() {
         designation: "Web Master"
       }
     },
+  
     
     {
       id: "ev_2026_003",
