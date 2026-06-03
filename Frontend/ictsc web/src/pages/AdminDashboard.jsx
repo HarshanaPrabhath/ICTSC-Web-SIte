@@ -10,7 +10,7 @@ function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const ADMIN_PASSWORD = "circle#2026"; 
+  const ADMIN_PASSWORD = "circle#2026";
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -37,50 +37,59 @@ function AdminDashboard() {
     }
   };
 
+  const handleMarkCollected = async (id) => {
+    try {
+      const regRef = doc(db, "registrations", id);
+      await updateDoc(regRef, { status: "collected" });
+    } catch (error) {
+      alert("Update failed: " + error.message);
+    }
+  };
+
   const downloadCSV = () => {
-  if (!registrations.length) {
-    alert("No data to export");
-    return;
-  }
+    if (!registrations.length) {
+      alert("No data to export");
+      return;
+    }
 
-  const headers = [
-    "Reference ID",
-    "Full Name",
-    "Telegram Number",
-    "Size",
-    "Quantity",
-    "Paid Amount",
-    "Status",
-    "Receipt URL",
-    "Created At"
-  ];
+    const headers = [
+      "Reference ID",
+      "Full Name",
+      "Telegram Number",
+      "Size",
+      "Quantity",
+      "Paid Amount",
+      "Status",
+      "Receipt URL",
+      "Created At"
+    ];
 
-  const rows = registrations.map(reg => [
-    reg.referenceId || "",
-    reg.fullName || "",
-    reg.tgNumber || "",
-    reg.size || "",
-    reg.quantity || "",
-    reg.paidAmount || 0,
-    reg.status || "",
-    reg.receiptUrl || "",
-    reg.createdAt?.toDate ? reg.createdAt.toDate().toISOString() : ""
-  ]);
+    const rows = registrations.map(reg => [
+      reg.referenceId || "",
+      reg.fullName || "",
+      reg.tgNumber || "",
+      reg.size || "",
+      reg.quantity || "",
+      reg.paidAmount || 0,
+      reg.status || "",
+      reg.receiptUrl || "",
+      reg.createdAt?.toDate ? reg.createdAt.toDate().toISOString() : ""
+    ]);
 
-  let csvContent =
-    "data:text/csv;charset=utf-8," +
-    [headers, ...rows]
-      .map(e => e.map(v => `"${v}"`).join(","))
-      .join("\n");
+    let csvContent =
+      "data:text/csv;charset=utf-8," +
+      [headers, ...rows]
+        .map(e => e.map(v => `"${v}"`).join(","))
+        .join("\n");
 
-  const encodedUri = encodeURI(csvContent);
-  const link = document.createElement("a");
-  link.setAttribute("href", encodedUri);
-  link.setAttribute("download", `firestore_backup_${Date.now()}.csv`);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-};
+    const encodedUri = encodeURI(csvContent);
+    const link = document.createElement("a");
+    link.setAttribute("href", encodedUri);
+    link.setAttribute("download", `firestore_backup_${Date.now()}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const filteredRegistrations = registrations.filter((reg) =>
     (reg.referenceId && reg.referenceId.toLowerCase().includes(searchTerm.toLowerCase())) ||
@@ -104,7 +113,6 @@ function AdminDashboard() {
     <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-10">
-      
         
         {/* STATS & SEARCH HEADER */}
         <div className="flex flex-col gap-6 mb-10">
@@ -112,14 +120,14 @@ function AdminDashboard() {
             <div className="flex flex-wrap gap-6 md:gap-12">
               <div>
                 <h2 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter">Order <span className="text-blue-500">Database</span></h2>
-            <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Total: {registrations.reduce((acc, reg) => acc + (reg.quantity || 0), 0)} T-Shirts</p>
+                <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Total: {registrations.reduce((acc, reg) => acc + (reg.quantity || 0), 0)} T-Shirts</p>
               </div>
               <div className="md:border-l md:border-white/10 md:pl-8">
                 <h2 className="text-3xl md:text-4xl font-black italic uppercase tracking-tighter text-green-500">Rs. {totalRevenue.toLocaleString()}</h2>
                 <p className="text-gray-500 text-[10px] font-black uppercase tracking-[0.2em] mt-2">Revenue Collected</p>
               </div>
-              
             </div>
+
             <input 
               type="text" 
               placeholder="Search Name, TG, or Ref..." 
@@ -127,17 +135,17 @@ function AdminDashboard() {
               onChange={(e) => setSearchTerm(e.target.value)} 
               className="w-full md:w-80 bg-white/5 border border-white/10 rounded-2xl px-5 py-3 outline-none focus:border-blue-500 transition-all" 
             />
+
             <button
-  onClick={downloadCSV}
-  className="bg-green-600 px-5 py-3 rounded-xl text-xs font-black uppercase hover:bg-green-500 transition-all"
->
-  Backup  
-</button> 
+              onClick={downloadCSV}
+              className="bg-green-600 px-5 py-3 rounded-xl text-xs font-black uppercase hover:bg-green-500 transition-all"
+            >
+              Backup
+            </button> 
           </div>
-          
         </div>
 
-        {/* MOBILE CARD VIEW (Visible only on small screens) */}
+        {/* MOBILE CARD VIEW */}
         <div className="grid grid-cols-1 gap-4 md:hidden">
           {filteredRegistrations.map((reg) => (
             <div key={reg.id} className="bg-white/5 border border-white/10 rounded-3xl p-5 space-y-4">
@@ -162,18 +170,30 @@ function AdminDashboard() {
                 >
                   View Receipt
                 </a>
-                
-                {reg.status === "confirmed" ? (
-                  <div className="flex-1 flex items-center justify-center gap-2 text-green-500 font-black text-[10px] uppercase bg-green-500/10 rounded-xl">
+
+                {reg.status === "collected" ? (
+                  <div className="flex-1 flex items-center justify-center gap-2 text-emerald-500 font-black text-[10px] uppercase bg-emerald-500/10 rounded-xl">
                     <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                    Confirmed
+                    Collected
+                  </div>
+                ) : reg.status === "confirmed" ? (
+                  <div className="flex gap-2 flex-1">
+                    <div className="flex-1 flex items-center justify-center gap-2 text-green-500 font-black text-[10px] uppercase bg-green-500/10 rounded-xl">
+                      Confirmed
+                    </div>
+                    <button 
+                      onClick={() => handleMarkCollected(reg.id)}
+                      className="flex-1 bg-emerald-600 text-white text-[10px] font-black uppercase py-3 rounded-xl hover:bg-emerald-500 transition-all"
+                    >
+                      Mark Collected
+                    </button>
                   </div>
                 ) : (
                   <button 
                     onClick={() => handleAcceptPayment(reg.id)}
                     className="flex-1 bg-blue-600 text-white text-[10px] font-black uppercase py-3 rounded-xl shadow-lg shadow-blue-600/20"
                   >
-                    Accept
+                    Accept Payment
                   </button>
                 )}
               </div>
@@ -181,7 +201,7 @@ function AdminDashboard() {
           ))}
         </div>
 
-        {/* DESKTOP TABLE VIEW (Hidden on mobile) */}
+        {/* DESKTOP TABLE VIEW */}
         <div className="hidden md:block overflow-x-auto bg-white/5 border border-white/10 rounded-[2rem]">
           <table className="w-full text-left">
             <thead className="border-b border-white/10 text-[10px] uppercase font-black tracking-[0.2em] text-blue-500">
@@ -215,11 +235,23 @@ function AdminDashboard() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    {reg.status === "confirmed" ? (
-                      <span className="inline-flex items-center gap-1 text-green-500 font-black text-[10px] uppercase tracking-widest bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
+                    {reg.status === "collected" ? (
+                      <span className="inline-flex items-center gap-1 text-emerald-500 font-black text-[10px] uppercase tracking-widest bg-emerald-500/10 px-3 py-2 rounded-lg border border-emerald-500/20">
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path></svg>
-                        Accepted
+                        Collected
                       </span>
+                    ) : reg.status === "confirmed" ? (
+                      <div className="flex items-center gap-2 justify-end">
+                        <span className="inline-flex items-center gap-1 text-green-500 font-black text-[10px] uppercase tracking-widest bg-green-500/10 px-3 py-2 rounded-lg border border-green-500/20">
+                          Confirmed
+                        </span>
+                        <button 
+                          onClick={() => handleMarkCollected(reg.id)}
+                          className="text-[10px] font-black uppercase bg-emerald-600 px-4 py-2 rounded-lg hover:bg-emerald-500 transition-all"
+                        >
+                          Mark Collected
+                        </button>
+                      </div>
                     ) : (
                       <button 
                         onClick={() => handleAcceptPayment(reg.id)}
