@@ -373,24 +373,24 @@ function HackTrailRegisterForm({
       </div>
 
       {showSuccessModal && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-[#020617]/80 px-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-3xl border border-emerald-400/20 bg-[#0B1120]/95 p-6 shadow-2xl shadow-emerald-400/10">
-            <div className="mb-4 flex items-start gap-3">
-              <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
+        <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-[#020617]/80 px-3 py-4 backdrop-blur-sm sm:items-center sm:px-4 sm:py-0">
+          <div className="w-full max-w-[92vw] rounded-3xl border border-emerald-400/20 bg-[#0B1120]/95 p-4 shadow-2xl shadow-emerald-400/10 sm:max-w-md sm:p-6">
+            <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start">
+              <div className="flex h-12 w-12 shrink-0 items-center justify-center self-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 sm:self-start">
                 <CheckCircle2 className="h-6 w-6" />
               </div>
-              <div>
+              <div className="text-center sm:text-left">
                 <p className="font-semibold text-emerald-200">Team created successfully</p>
-                <p className="mt-1 text-sm text-slate-300">
-                  Your team has been registered.
+                <p className="mt-1 text-sm leading-6 text-slate-300">
+                  Your team has been registered and is ready for the trail.
                 </p>
               </div>
             </div>
-            <div className="flex justify-end">
+            <div className="flex justify-center sm:justify-end">
               <button
                 type="button"
                 onClick={() => setShowSuccessModal(false)}
-                className="rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-200 hover:bg-white/[0.06]"
+                className="w-full rounded-xl border border-white/[0.08] bg-white/[0.03] px-4 py-2 text-sm font-semibold text-slate-200 transition-all duration-200 hover:bg-white/[0.06] sm:w-auto"
               >
                 Close
               </button>
