@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { db } from "../firebaseConfig";
 import { collection, query, orderBy, onSnapshot, doc, updateDoc } from "firebase/firestore";
 import Navbar from "../components/Navbar";
-
+import { Link } from "react-router-dom";
 function AdminDashboard() {
   const [registrations, setRegistrations] = useState([]);
   const [requests, setRequests] = useState([]);
@@ -215,6 +215,14 @@ function AdminDashboard() {
           >
             Requests {requests.length > 0 && `(${requests.length})`}
           </button>
+
+          <Link to="h-dash">
+          <button
+            className={`px-6 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${activeTab === "requests" ? "bg-blue-600 text-white" : "text-gray-400 hover:text-white"}`}
+          >
+            Access Hacktrail Dashboard
+          </button>
+          </Link>
         </div>
 
         {activeTab === "orders" && (

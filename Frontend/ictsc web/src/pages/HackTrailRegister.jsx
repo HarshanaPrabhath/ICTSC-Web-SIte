@@ -67,7 +67,7 @@ function RulesSummary() {
     { text: "Candidate lists span exactly 3 different batches.", icon: MapPin },
     { text: "No more than 2 candidates share a batch.", icon: MapPin },
     { text: "At least 2 candidates must be female.", icon: Users },
-    { text: "Batch 10 must have a representative aboard.", icon: Flag },
+    { text: "A 10th Batch student must be a member of your team.", icon: Flag },
   ];
 
   return (
@@ -79,8 +79,7 @@ function RulesSummary() {
           </div>
           <div>
             <h2 className="font-[Space_Grotesk] text-lg font-semibold tracking-tight text-slate-100">
-              Trail markers
-            </h2>
+              Conditions            </h2>
             <p className="text-xs text-slate-500">The route every candidate list has to follow</p>
           </div>
         </div>
@@ -116,7 +115,7 @@ function RegistrationOverview({ registeredCount, teamLimit }) {
   const stats = [
     { label: "Total capacity", value: teamLimit, note: `${teamLimit * TEAM_SIZE} participant slots overall`, icon: Users, tone: "cyan" },
     { label: "Registered teams", value: registeredCount, note: "Confirmed entries on the trail", icon: CheckCircle2, tone: "emerald" },
-    { label: "Slots remaining", value: remaining, note: "Still open for registration", icon: Sparkles, tone: "amber" },
+    { label: "Slots remaining for teams", value: remaining, note: "Still open for registration", icon: Sparkles, tone: "amber" },
   ];
   const toneMap = {
     cyan: "border-cyan-400/20 bg-cyan-400/10 text-cyan-300",
@@ -262,12 +261,12 @@ function HackTrailRegister() {
           <TrailSpine />
           <div className="space-y-8 md:pl-14">
             <div className="hidden md:block">
-              <Checkpoint index="01" label="Trail markers" tone="cyan" />
+              <Checkpoint index="01" label="Conditions" tone="cyan" />
             </div>
             <RulesSummary />
 
             <div className="hidden md:block">
-              <Checkpoint index="02" label="Basecamp status" tone="emerald" />
+              <Checkpoint index="02" label="Teams status" tone="emerald" />
             </div>
             <RegistrationOverview registeredCount={registeredTeams.length} teamLimit={teamLimit} />
 

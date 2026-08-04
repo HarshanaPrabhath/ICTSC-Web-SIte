@@ -65,7 +65,7 @@ function Home() {
             </p>
 
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Link
+              {/* <Link
                 to="/register"
                 className="group relative inline-flex items-center justify-center px-6 py-3 font-black text-white transition-all duration-300 bg-blue-600 rounded-xl hover:bg-blue-500 shadow-xl shadow-blue-600/20 active:scale-95"
               >
@@ -73,10 +73,11 @@ function Home() {
                   <span className="size-1.5 rounded-full bg-cyan-300 animate-ping"></span>
                   T-Shirt  Registration Open
                 </span>
-              </Link>
+              </Link> */}
               <Link
                 to="/hacktrailregister"
-                className="group relative inline-flex items-center justify-center px-6 py-3 font-black text-white transition-all duration-300 bg-blue-600 rounded-xl hover:bg-blue-500 shadow-xl shadow-blue-600/20 active:scale-95"
+                className="group relative inline-flex items-center justify-center px-6 py-3 font-black text-white transition-all duration-300 bg-
+                -600 rounded-xl hover:bg-blue-500 shadow-xl shadow-blue-600/20 active:scale-95"
               >
                 <span className="relative flex items-center gap-2 uppercase tracking-[0.2em] text-[10px]">
                   <span className="size-1.5 rounded-full bg-cyan-300 animate-ping"></span>

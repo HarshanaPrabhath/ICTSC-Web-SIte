@@ -24,7 +24,7 @@ function App() {
           <Route path="/contact" element={<Contact/>} />
           <Route path="/register" element={<TShirtRegistration/>} />
           <Route path="/hacktrailregister" element={<HackTrailRegister />} />
-          <Route path="/hacktrail-dashboard" element={<HackTrailDashboard />} />
+          <Route path="admin/h-dash" element={<HackTrailDashboard />} />
           
           {/* Admin Route */}
           <Route path="/admin" element={<AdminDashboard />} />
