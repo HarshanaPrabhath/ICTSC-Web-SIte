@@ -317,7 +317,7 @@ function HackTrailDashboard() {
         <style>{FONTS}</style>
         <div className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#0B1120] px-6 py-4">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-          <span className="font-mono text-xs text-slate-400">Loading admin basecamp...</span>
+          <span className="font-mono text-xs text-slate-400">Loading admin Dashboard...</span>
         </div>
       </div>
     );
