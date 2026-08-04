@@ -9,6 +9,8 @@ import Project from "./pages/Project";
 import Contact from "./pages/Contact";
 import AdminDashboard from "./pages/AdminDashboard"; // Fixed the spelling here
 import TShirtRegistration from "./pages/TShirtRegistration";
+import HackTrailRegister from "./pages/HackTrailRegister";
+import HackTrailDashboard from "./pages/HackTrailDashboard";
 
 
 function App() {
@@ -21,6 +23,8 @@ function App() {
           <Route path="/calender" element={<Calender />} />
           <Route path="/contact" element={<Contact/>} />
           <Route path="/register" element={<TShirtRegistration/>} />
+          <Route path="/hacktrailregister" element={<HackTrailRegister />} />
+          <Route path="/hacktrail-dashboard" element={<HackTrailDashboard />} />
           
           {/* Admin Route */}
           <Route path="/admin" element={<AdminDashboard />} />
