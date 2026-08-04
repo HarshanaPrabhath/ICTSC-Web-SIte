@@ -185,12 +185,13 @@ function HackTrailRegister() {
   async function createTeam(team) {
     if (registeredTeams.length >= teamLimit) {
       setMessage("Registration is full. No more teams can join the trail.");
-      return;
+      return false;
     }
     const nextTeams = [...registeredTeams, team];
     await saveRegisteredTeams(nextTeams);
     setRegisteredTeams(nextTeams);
     setMessage(`${team.name} is on the trail. Registration confirmed.`);
+    return true;
   }
 
   if (loading) {

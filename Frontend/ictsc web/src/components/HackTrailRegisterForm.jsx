@@ -136,19 +136,24 @@ function TeamChecklist({ team }) {
 }
 
 function HackTrailRegisterForm({
-  initialTeam = createEmptyTeamForm(),
+  initialTeam = null,
   existingTeams = [],
   editingTeamId = "",
   submitLabel = "Register Team",
   onSubmit,
   onCancel,
 }) {
-  const [team, setTeam] = useState(initialTeam);
+  const resolvedInitialTeam = useMemo(
+    () => initialTeam || createEmptyTeamForm(),
+    [initialTeam]
+  );
+  const [team, setTeam] = useState(resolvedInitialTeam);
   const [errors, setErrors] = useState([]);
   const previewTeam = useMemo(
     () => ({ ...team, members: team.members.map(buildMember) }),
     [team]
   );
+
 
   function groupErrors(errorList) {
     const unique = [...new Set(errorList)];
@@ -182,14 +187,15 @@ function HackTrailRegisterForm({
       setErrors([...new Set(result.errors)]);
       return;
     }
-    await onSubmit({
+    const saved = await onSubmit({
       ...result.team,
       id: editingTeamId || `team-${Date.now()}`,
       name: result.team.name.trim(),
       leaderId: result.team.leaderId || result.team.members[0].id,
-      createdAt: initialTeam.createdAt || new Date().toISOString(),
+      createdAt: resolvedInitialTeam.createdAt || new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     });
+    if (saved === false) return;
     setErrors([]);
     setTeam(createEmptyTeamForm());
   }
@@ -368,4 +374,7 @@ function HackTrailRegisterForm({
 }
 
 export default HackTrailRegisterForm;
+
+
+
 

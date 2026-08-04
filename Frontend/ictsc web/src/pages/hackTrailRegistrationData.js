@@ -1,6 +1,7 @@
 import { db } from "../firebaseConfig";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
   getDocs,
@@ -200,6 +201,23 @@ export async function saveRegisteredTeams(teams) {
   });
 
   await batch.commit();
+}
+
+export async function saveRegisteredTeam(team) {
+  const teamId = team.id || `team-${Date.now()}`;
+  await setDoc(doc(db, HACKTRAIL_TEAMS_COLLECTION, teamId), {
+    ...team,
+    id: teamId,
+  });
+
+  return {
+    ...team,
+    id: teamId,
+  };
+}
+
+export async function deleteRegisteredTeam(teamId) {
+  await deleteDoc(doc(db, HACKTRAIL_TEAMS_COLLECTION, teamId));
 }
 
 export async function loadHackTrailSettings() {

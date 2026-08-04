@@ -6,18 +6,24 @@ import {
   Flag,
   Info,
   MapPin,
+  Pencil,
   RefreshCw,
   Save,
   Settings2,
   Sparkles,
+  Trash2,
   Users,
+  X,
 } from "lucide-react";
+import HackTrailRegisterForm from "../components/HackTrailRegisterForm";
 import {
   TEAM_SIZE,
+  deleteRegisteredTeam,
   deriveBatch,
   loadHackTrailSettings,
   loadRegisteredTeams,
   saveHackTrailSettings,
+  saveRegisteredTeam,
 } from "./hackTrailRegistrationData";
 
 const FONTS = `
@@ -90,7 +96,7 @@ function StatCard({ label, value, note, icon, tone = "cyan" }) {
   );
 }
 
-function TeamCard({ team, index }) {
+function TeamCard({ team, index, onEdit, onDelete }) {
   const meta = getTeamMeta(team);
 
   return (
@@ -107,6 +113,24 @@ function TeamCard({ team, index }) {
             <p className="mt-1 text-xs text-slate-500">
               Registered {formatDate(team.createdAt)}
             </p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={() => onEdit(team)}
+                className="inline-flex items-center gap-2 rounded-xl border border-cyan-400/20 bg-cyan-400/10 px-3.5 py-2 text-xs font-semibold text-cyan-300 transition-all duration-200 hover:bg-cyan-400/[0.15] active:scale-[0.99]"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                Edit team
+              </button>
+              <button
+                type="button"
+                onClick={() => onDelete(team)}
+                className="inline-flex items-center gap-2 rounded-xl border border-rose-400/20 bg-rose-400/10 px-3.5 py-2 text-xs font-semibold text-rose-300 transition-all duration-200 hover:bg-rose-400/[0.15] active:scale-[0.99]"
+              >
+                <Trash2 className="h-3.5 w-3.5" />
+                Delete
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-center">
@@ -197,6 +221,7 @@ function HackTrailDashboard() {
   const [teamLimitDraft, setTeamLimitDraft] = useState(3);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [editingTeam, setEditingTeam] = useState(null);
   const [message, setMessage] = useState("");
 
   const totalMembers = useMemo(
@@ -247,6 +272,42 @@ function HackTrailDashboard() {
       setMessage("Team count limit could not be updated.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function updateRegisteredTeam(team) {
+    try {
+      const savedTeam = await saveRegisteredTeam(team);
+      setRegisteredTeams((currentTeams) =>
+        currentTeams.map((currentTeam) =>
+          currentTeam.id === savedTeam.id ? savedTeam : currentTeam
+        )
+      );
+      setEditingTeam(null);
+      setMessage(`${savedTeam.name} was updated successfully.`);
+      return true;
+    } catch {
+      setMessage("Registered team could not be updated.");
+      return false;
+    }
+  }
+
+  async function removeRegisteredTeam(team) {
+    const confirmed = window.confirm(
+      `Delete ${team.name || "this team"} from HackTrail registrations?`
+    );
+
+    if (!confirmed) return;
+
+    try {
+      await deleteRegisteredTeam(team.id);
+      setRegisteredTeams((currentTeams) =>
+        currentTeams.filter((currentTeam) => currentTeam.id !== team.id)
+      );
+      if (editingTeam?.id === team.id) setEditingTeam(null);
+      setMessage(`${team.name || "Team"} was deleted from registrations.`);
+    } catch {
+      setMessage("Registered team could not be deleted.");
     }
   }
 
@@ -429,6 +490,39 @@ function HackTrailDashboard() {
           </div>
         </section>
 
+        {editingTeam && (
+          <section className="space-y-4 rounded-3xl border border-cyan-400/20 bg-cyan-400/[0.04] p-5 shadow-2xl shadow-black/40 backdrop-blur-xl md:p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-400">
+                  Edit registered team
+                </p>
+                <h2 className="mt-1 font-[Space_Grotesk] text-2xl font-semibold tracking-tight text-slate-100">
+                  Updating {editingTeam.name || "selected team"}
+                </h2>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingTeam(null)}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3 text-sm font-semibold text-slate-300 transition-all duration-200 hover:bg-white/[0.05] active:scale-[0.99]"
+              >
+                <X className="h-4 w-4" />
+                Close editor
+              </button>
+            </div>
+
+            <HackTrailRegisterForm
+              key={editingTeam.id}
+              initialTeam={editingTeam}
+              existingTeams={registeredTeams}
+              editingTeamId={editingTeam.id}
+              submitLabel="Update Team"
+              onSubmit={updateRegisteredTeam}
+              onCancel={() => setEditingTeam(null)}
+            />
+          </section>
+        )}
+
         <section className="space-y-4">
           <div className="flex items-center justify-between">
             <div>
@@ -447,7 +541,13 @@ function HackTrailDashboard() {
           {registeredTeams.length > 0 ? (
             <div className="space-y-5">
               {registeredTeams.map((team, index) => (
-                <TeamCard key={team.id || team.name || index} team={team} index={index} />
+                <TeamCard
+                  key={team.id || team.name || index}
+                  team={team}
+                  index={index}
+                  onEdit={setEditingTeam}
+                  onDelete={removeRegisteredTeam}
+                />
               ))}
             </div>
           ) : (
