@@ -1,4 +1,4 @@
-﻿import React, { useMemo, useState } from "react";
+﻿import React, { useMemo, useRef, useState } from "react";
 import {
   AlertCircle,
   ArrowRight,
@@ -150,6 +150,13 @@ function HackTrailRegisterForm({
   const [team, setTeam] = useState(resolvedInitialTeam);
   const [errors, setErrors] = useState([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Ref-based guard: updates synchronously, unlike state, so a rapid
+  // double-click can't sneak past the check before React re-renders
+  // and disables the button. This is the actual fix for duplicate
+  // team creation on multiple clicks.
+  const isSubmittingRef = useRef(false);
+
   const previewTeam = useMemo(
     () => ({ ...team, members: team.members.map(buildMember) }),
     [team]
@@ -183,16 +190,20 @@ function HackTrailRegisterForm({
 
   async function submitTeam(event) {
     event.preventDefault();
-    if (isSubmitting) return;
 
-    const result = validateTeam(team, existingTeams, editingTeamId);
-    if (result.errors.length) {
-      setErrors([...new Set(result.errors)]);
-      return;
-    }
-
+    // Synchronous guard — blocks a second click even if it fires before
+    // the isSubmitting state has re-rendered and disabled the button.
+    if (isSubmittingRef.current) return;
+    isSubmittingRef.current = true;
     setIsSubmitting(true);
+
     try {
+      const result = validateTeam(team, existingTeams, editingTeamId);
+      if (result.errors.length) {
+        setErrors([...new Set(result.errors)]);
+        return;
+      }
+
       const saved = await onSubmit({
         ...result.team,
         id: editingTeamId || `team-${Date.now()}`,
@@ -206,6 +217,7 @@ function HackTrailRegisterForm({
       alert("Team created successfully!");
       setTeam(createEmptyTeamForm());
     } finally {
+      isSubmittingRef.current = false;
       setIsSubmitting(false);
     }
   }
@@ -367,14 +379,15 @@ function HackTrailRegisterForm({
           className="group relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-4 text-sm font-semibold text-[#04121a] shadow-lg shadow-emerald-400/20 transition-all duration-200 hover:shadow-emerald-400/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
         >
           <Save className="h-4 w-4" />
-          <span>{submitLabel}</span>
+          <span>{isSubmitting ? "Registering..." : submitLabel}</span>
           <ArrowRight className="h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" />
         </button>
         {onCancel && (
           <button
             type="button"
+            disabled={isSubmitting}
             onClick={onCancel}
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-6 py-4 text-sm font-semibold text-slate-300 transition-all duration-200 hover:bg-white/[0.05] active:scale-[0.99]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.02] px-6 py-4 text-sm font-semibold text-slate-300 transition-all duration-200 hover:bg-white/[0.05] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancel
           </button>
@@ -386,7 +399,3 @@ function HackTrailRegisterForm({
 }
 
 export default HackTrailRegisterForm;
-
-
-
-
