@@ -373,8 +373,8 @@ function HackTrailRegisterForm({
       </div>
 
       {showSuccessModal && (
-        <div className="fixed inset-0 z-[60] flex items-start justify-center overflow-y-auto bg-[#020617]/80 px-3 py-4 backdrop-blur-sm sm:items-center sm:px-4 sm:py-0">
-          <div className="w-full max-w-[92vw] rounded-3xl border border-emerald-400/20 bg-[#0B1120]/95 p-4 shadow-2xl shadow-emerald-400/10 sm:max-w-md sm:p-6">
+        <div className="fixed inset-0 z-[60] flex items-center justify-center overflow-y-auto bg-[#020617]/80 px-3 py-6 backdrop-blur-sm sm:px-4">
+          <div className="my-auto w-full max-w-[92vw] rounded-3xl border border-emerald-400/20 bg-[#0B1120]/95 p-4 shadow-2xl shadow-emerald-400/10 sm:max-w-md sm:p-6">
             <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-start">
               <div className="flex h-12 w-12 shrink-0 items-center justify-center self-center rounded-2xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300 sm:self-start">
                 <CheckCircle2 className="h-6 w-6" />
