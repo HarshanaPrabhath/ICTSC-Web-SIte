@@ -52,14 +52,14 @@ function getBatch(member) {
 function getTeamMeta(team) {
   const members = team.members || [];
   const completeMembers = members.filter(
-    (member) => member.name && member.registrationNumber && member.gender
+    (member) => member.name && member.registrationNumber && member.gender,
   );
-  const femaleCount = members.filter((member) => member.gender === "Female").length;
+  const femaleCount = members.filter(
+    (member) => member.gender === "Female",
+  ).length;
   const batches = [...new Set(members.map(getBatch).filter(Boolean))];
   const captain =
-    members.find((member) => member.id === team.leaderId) ||
-    members[0] ||
-    null;
+    members.find((member) => member.id === team.leaderId) || members[0] || null;
 
   return {
     batches,
@@ -84,7 +84,9 @@ function StatCard({ label, value, note, icon, tone = "cyan" }) {
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
           {label}
         </p>
-        <div className={`flex h-8 w-8 items-center justify-center rounded-xl border ${toneMap[tone]}`}>
+        <div
+          className={`flex h-8 w-8 items-center justify-center rounded-xl border ${toneMap[tone]}`}
+        >
           <IconComponent className="h-4 w-4" />
         </div>
       </div>
@@ -135,16 +137,28 @@ function TeamCard({ team, index, onEdit, onDelete }) {
 
           <div className="grid grid-cols-3 gap-2 text-center">
             <div className="rounded-2xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-              <p className="font-mono text-lg font-semibold text-slate-100">{meta.completeMembers}/{TEAM_SIZE}</p>
-              <p className="text-[10px] uppercase tracking-wide text-slate-500">Candidates</p>
+              <p className="font-mono text-lg font-semibold text-slate-100">
+                {meta.completeMembers}/{TEAM_SIZE}
+              </p>
+              <p className="text-[10px] uppercase tracking-wide text-slate-500">
+                Candidates
+              </p>
             </div>
             <div className="rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.05] px-4 py-3">
-              <p className="font-mono text-lg font-semibold text-emerald-200">{meta.femaleCount}</p>
-              <p className="text-[10px] uppercase tracking-wide text-slate-500">Female</p>
+              <p className="font-mono text-lg font-semibold text-emerald-200">
+                {meta.femaleCount}
+              </p>
+              <p className="text-[10px] uppercase tracking-wide text-slate-500">
+                Female
+              </p>
             </div>
             <div className="rounded-2xl border border-amber-400/15 bg-amber-400/[0.05] px-4 py-3">
-              <p className="font-mono text-lg font-semibold text-amber-200">{meta.batches.length}</p>
-              <p className="text-[10px] uppercase tracking-wide text-slate-500">Batches</p>
+              <p className="font-mono text-lg font-semibold text-amber-200">
+                {meta.batches.length}
+              </p>
+              <p className="text-[10px] uppercase tracking-wide text-slate-500">
+                Batches
+              </p>
             </div>
           </div>
         </div>
@@ -227,10 +241,11 @@ function HackTrailDashboard() {
   const totalMembers = useMemo(
     () =>
       registeredTeams.reduce(
-        (count, team) => count + (team.members || []).filter((member) => member.name).length,
-        0
+        (count, team) =>
+          count + (team.members || []).filter((member) => member.name).length,
+        0,
       ),
-    [registeredTeams]
+    [registeredTeams],
   );
   const slotsRemaining = Math.max(teamLimit - registeredTeams.length, 0);
   const isFull = registeredTeams.length >= teamLimit;
@@ -280,8 +295,8 @@ function HackTrailDashboard() {
       const savedTeam = await saveRegisteredTeam(team);
       setRegisteredTeams((currentTeams) =>
         currentTeams.map((currentTeam) =>
-          currentTeam.id === savedTeam.id ? savedTeam : currentTeam
-        )
+          currentTeam.id === savedTeam.id ? savedTeam : currentTeam,
+        ),
       );
       setEditingTeam(null);
       setMessage(`${savedTeam.name} was updated successfully.`);
@@ -294,30 +309,38 @@ function HackTrailDashboard() {
 
   async function removeRegisteredTeam(team) {
     const confirmed = window.confirm(
-      `Delete ${team.name || "this team"} from HackTrail registrations?`
+      `Delete ${team.name || "this team"} from HackTrail registrations?`,
     );
 
     if (!confirmed) return;
 
+    if (!team.id) {
+      console.error("removeRegisteredTeam: team has no id", team);
+      setMessage("This team has no ID and can't be deleted — try refreshing.");
+      return;
+    }
+
     try {
       await deleteRegisteredTeam(team.id);
       setRegisteredTeams((currentTeams) =>
-        currentTeams.filter((currentTeam) => currentTeam.id !== team.id)
+        currentTeams.filter((currentTeam) => currentTeam.id !== team.id),
       );
       if (editingTeam?.id === team.id) setEditingTeam(null);
       setMessage(`${team.name || "Team"} was deleted from registrations.`);
-    } catch {
-      setMessage("Registered team could not be deleted.");
+    } catch (error) {
+      console.error("removeRegisteredTeam failed:", error);
+      setMessage(`Registered team could not be deleted: ${error.message}`);
     }
   }
-
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#070B14] px-4">
         <style>{FONTS}</style>
         <div className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#0B1120] px-6 py-4">
           <div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-          <span className="font-mono text-xs text-slate-400">Loading admin Dashboard...</span>
+          <span className="font-mono text-xs text-slate-400">
+            Loading admin Dashboard...
+          </span>
         </div>
       </div>
     );
@@ -326,7 +349,10 @@ function HackTrailDashboard() {
   return (
     <div
       className="min-h-screen px-4 py-12 font-[Inter] text-slate-200 antialiased"
-      style={{ background: "radial-gradient(ellipse 90% 60% at 50% -10%, #14213C 0%, #070B14 55%, #050810 100%)" }}
+      style={{
+        background:
+          "radial-gradient(ellipse 90% 60% at 50% -10%, #14213C 0%, #070B14 55%, #050810 100%)",
+      }}
     >
       <style>{FONTS}</style>
       <div className="mx-auto max-w-6xl space-y-8">
@@ -357,7 +383,8 @@ function HackTrailDashboard() {
                 Registration Dashboard
               </h1>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400">
-                Monitor registered teams, candidate details, capacity, and the team count limit from one basecamp.
+                Monitor registered teams, candidate details, capacity, and the
+                team count limit from one basecamp.
               </p>
             </div>
 
@@ -396,7 +423,11 @@ function HackTrailDashboard() {
           <StatCard
             label="Remaining"
             value={slotsRemaining}
-            note={isFull ? "Registration is currently full" : "Teams can still register"}
+            note={
+              isFull
+                ? "Registration is currently full"
+                : "Teams can still register"
+            }
             icon={isFull ? AlertCircle : Sparkles}
             tone={isFull ? "rose" : "amber"}
           />
@@ -422,7 +453,9 @@ function HackTrailDashboard() {
                 <h2 className="font-[Space_Grotesk] text-lg font-semibold tracking-tight text-slate-100">
                   Team count control
                 </h2>
-                <p className="text-xs text-slate-500">Change how many teams can register</p>
+                <p className="text-xs text-slate-500">
+                  Change how many teams can register
+                </p>
               </div>
             </div>
 
@@ -437,7 +470,8 @@ function HackTrailDashboard() {
               className="mt-2 w-full rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-3.5 font-mono text-sm font-medium text-slate-100 transition-all duration-200 focus:border-cyan-400/50 focus:bg-white/[0.04] focus:outline-none focus:ring-4 focus:ring-cyan-400/10"
             />
             <p className="mt-3 text-xs leading-relaxed text-slate-500">
-              Current scenario: {registeredTeams.length} of {teamLimit} team slots are used.
+              Current scenario: {registeredTeams.length} of {teamLimit} team
+              slots are used.
               {Number(teamLimitDraft) < registeredTeams.length
                 ? " Saving below the registered count will mark registration as full, but existing teams stay visible."
                 : ""}
@@ -462,26 +496,38 @@ function HackTrailDashboard() {
                 <h2 className="font-[Space_Grotesk] text-lg font-semibold tracking-tight text-slate-100">
                   Registration scenario
                 </h2>
-                <p className="text-xs text-slate-500">Live status based on team limit and submitted teams</p>
+                <p className="text-xs text-slate-500">
+                  Live status based on team limit and submitted teams
+                </p>
               </div>
             </div>
 
             <div className="h-3 overflow-hidden rounded-full bg-white/[0.04]">
               <div
                 className={`h-full rounded-full ${isFull ? "bg-amber-400" : "bg-gradient-to-r from-emerald-400 to-cyan-400"}`}
-                style={{ width: `${Math.min((registeredTeams.length / teamLimit) * 100, 100)}%` }}
+                style={{
+                  width: `${Math.min((registeredTeams.length / teamLimit) * 100, 100)}%`,
+                }}
               />
             </div>
 
             <div className="mt-5 flex flex-col gap-3 sm:flex-row">
               <div className="flex-1 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">Status</p>
-                <p className={`mt-2 text-sm font-semibold ${isFull ? "text-amber-300" : "text-emerald-300"}`}>
-                  {isFull ? "Trail registration is full" : "Trail registration is open"}
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                  Status
+                </p>
+                <p
+                  className={`mt-2 text-sm font-semibold ${isFull ? "text-amber-300" : "text-emerald-300"}`}
+                >
+                  {isFull
+                    ? "Trail registration is full"
+                    : "Trail registration is open"}
                 </p>
               </div>
               <div className="flex-1 rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4">
-                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">Capacity</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">
+                  Capacity
+                </p>
                 <p className="mt-2 text-sm font-semibold text-slate-200">
                   {registeredTeams.length}/{teamLimit} teams
                 </p>
