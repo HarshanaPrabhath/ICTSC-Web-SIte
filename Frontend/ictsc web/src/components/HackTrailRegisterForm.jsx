@@ -149,6 +149,7 @@ function HackTrailRegisterForm({
   );
   const [team, setTeam] = useState(resolvedInitialTeam);
   const [errors, setErrors] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const previewTeam = useMemo(
     () => ({ ...team, members: team.members.map(buildMember) }),
     [team]
@@ -182,23 +183,31 @@ function HackTrailRegisterForm({
 
   async function submitTeam(event) {
     event.preventDefault();
+    if (isSubmitting) return;
+
     const result = validateTeam(team, existingTeams, editingTeamId);
     if (result.errors.length) {
       setErrors([...new Set(result.errors)]);
       return;
     }
-    const saved = await onSubmit({
-      ...result.team,
-      id: editingTeamId || `team-${Date.now()}`,
-      name: result.team.name.trim(),
-      leaderId: result.team.leaderId || result.team.members[0].id,
-      createdAt: resolvedInitialTeam.createdAt || new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-    if (saved === false) return;
-    setErrors([]);
-    alert("Team created successfully!");
-    setTeam(createEmptyTeamForm());
+
+    setIsSubmitting(true);
+    try {
+      const saved = await onSubmit({
+        ...result.team,
+        id: editingTeamId || `team-${Date.now()}`,
+        name: result.team.name.trim(),
+        leaderId: result.team.leaderId || result.team.members[0].id,
+        createdAt: resolvedInitialTeam.createdAt || new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      });
+      if (saved === false) return;
+      setErrors([]);
+      alert("Team created successfully!");
+      setTeam(createEmptyTeamForm());
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -354,7 +363,8 @@ function HackTrailRegisterForm({
       <div className="flex flex-col gap-3 pt-2 sm:flex-row">
         <button
           type="submit"
-          className="group relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-4 text-sm font-semibold text-[#04121a] shadow-lg shadow-emerald-400/20 transition-all duration-200 hover:shadow-emerald-400/30 active:scale-[0.99]"
+          disabled={isSubmitting}
+          className="group relative inline-flex flex-1 items-center justify-center gap-2 overflow-hidden rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 px-6 py-4 text-sm font-semibold text-[#04121a] shadow-lg shadow-emerald-400/20 transition-all duration-200 hover:shadow-emerald-400/30 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
         >
           <Save className="h-4 w-4" />
           <span>{submitLabel}</span>
