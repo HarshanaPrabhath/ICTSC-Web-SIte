@@ -3,6 +3,7 @@ import {
   AlertCircle,
   CheckCircle2,
   Crown,
+  Download,
   Flag,
   Info,
   MapPin,
@@ -67,6 +68,71 @@ function getTeamMeta(team) {
     completeMembers: completeMembers.length,
     femaleCount,
   };
+}
+
+function escapeCsvValue(value) {
+  const text = value == null ? "" : String(value);
+
+  return /[",\n\r]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text;
+}
+
+function buildTeamsCsv(teams) {
+  const headers = [
+    "team_id",
+    "team_name",
+    "registered_at",
+    "leader_name",
+    "member_number",
+    "member_id",
+    "member_name",
+    "registration_number",
+    "gender",
+    "batch",
+    "is_leader",
+  ];
+
+  const rows = teams.flatMap((team) => {
+    const members = team.members || [];
+    const leader =
+      members.find((member) => member.id === team.leaderId) || members[0] || {};
+
+    return members.map((member, memberIndex) => {
+      const isLeader =
+        (team.leaderId && team.leaderId === member.id) ||
+        (!team.leaderId && memberIndex === 0);
+
+      return [
+        team.id,
+        team.name,
+        team.createdAt,
+        leader.name,
+        memberIndex + 1,
+        member.id,
+        member.name,
+        member.registrationNumber,
+        member.gender,
+        getBatch(member),
+        isLeader ? "Yes" : "No",
+      ];
+    });
+  });
+
+  return [headers, ...rows]
+    .map((row) => row.map(escapeCsvValue).join(","))
+    .join("\r\n");
+}
+
+function downloadCsv(filename, csvContent) {
+  const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  URL.revokeObjectURL(url);
 }
 
 function StatCard({ label, value, note, icon, tone = "cyan" }) {
@@ -332,6 +398,22 @@ function HackTrailDashboard() {
       setMessage(`Registered team could not be deleted: ${error.message}`);
     }
   }
+
+  function backupTeamsToCsv() {
+    if (registeredTeams.length === 0) {
+      setMessage("No registered teams available to back up.");
+      return;
+    }
+
+    const dateStamp = new Date().toISOString().slice(0, 10);
+
+    downloadCsv(
+      `hacktrail-teams-backup-${dateStamp}.csv`,
+      buildTeamsCsv(registeredTeams),
+    );
+    setMessage(`Backup CSV created for ${registeredTeams.length} teams.`);
+  }
+
   if (loading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#070B14] px-4">
@@ -388,14 +470,25 @@ function HackTrailDashboard() {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={loadDashboardData}
-              className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:bg-white/[0.07] active:scale-[0.99]"
-            >
-              <RefreshCw className="h-4 w-4" />
-              Refresh
-            </button>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={backupTeamsToCsv}
+                disabled={registeredTeams.length === 0}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-5 py-3 text-sm font-semibold text-emerald-300 transition-all duration-200 hover:bg-emerald-400/[0.15] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Download className="h-4 w-4" />
+                Backup CSV
+              </button>
+              <button
+                type="button"
+                onClick={loadDashboardData}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/[0.08] bg-white/[0.04] px-5 py-3 text-sm font-semibold text-slate-200 transition-all duration-200 hover:bg-white/[0.07] active:scale-[0.99]"
+              >
+                <RefreshCw className="h-4 w-4" />
+                Refresh
+              </button>
+            </div>
           </div>
         </header>
 
@@ -570,7 +663,7 @@ function HackTrailDashboard() {
         )}
 
         <section className="space-y-4">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
               <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-cyan-400">
                 Registered teams
@@ -579,9 +672,20 @@ function HackTrailDashboard() {
                 Team candidate list
               </h2>
             </div>
-            <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1 font-mono text-[11px] font-semibold text-slate-300">
-              {registeredTeams.length} teams
-            </span>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={backupTeamsToCsv}
+                disabled={registeredTeams.length === 0}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-emerald-400/20 bg-emerald-400/10 px-3.5 py-2 text-xs font-semibold text-emerald-300 transition-all duration-200 hover:bg-emerald-400/[0.15] active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                <Download className="h-3.5 w-3.5" />
+                Backup CSV
+              </button>
+              <span className="rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1 font-mono text-[11px] font-semibold text-slate-300">
+                {registeredTeams.length} teams
+              </span>
+            </div>
           </div>
 
           {registeredTeams.length > 0 ? (
