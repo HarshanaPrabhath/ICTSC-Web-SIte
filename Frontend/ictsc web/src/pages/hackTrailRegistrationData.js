@@ -89,7 +89,7 @@ export function getRuleStatus(team) {
 
   return {
     size: completeMembers.length === TEAM_SIZE && members.length === TEAM_SIZE,
-    batchCount: new Set(completeMembers.map((member) => member.batch)).size === 3,
+    batchCount: new Set(completeMembers.map((member) => member.batch)).size >= 3,
     maxBatch: Object.values(batchCounts).every((count) => count <= 2),
     female: femaleCount >= 2,
     batch10: completeMembers.some((member) => member.batch === REQUIRED_BATCH),
@@ -104,7 +104,7 @@ export function getTeamChecklist(team) {
 
   return [
     { key: "size", passed: rules.size, label: `Exactly 5 candidates (${completeMembers.length}/${TEAM_SIZE})` },
-    { key: "batchCount", passed: rules.batchCount, label: "Exactly 3 different batches" },
+    { key: "batchCount", passed: rules.batchCount, label: "At least 3 different batches" },
     { key: "maxBatch", passed: rules.maxBatch, label: "No more than 2 from one batch" },
     { key: "female", passed: rules.female, label: "At least 2 female candidates" },
     { key: "batch10", passed: rules.batch10, label: "At least 1 Batch 10 candidate" },

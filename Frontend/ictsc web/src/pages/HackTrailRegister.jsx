@@ -64,7 +64,7 @@ function TrailSpine() {
 function RulesSummary() {
   const rules = [
     { text: "Every team includes exactly 5 candidates.", icon: Users },
-    { text: "Candidate lists span exactly 3 different batches.", icon: MapPin },
+    { text: "Candidate lists span at least 3 different batches.", icon: MapPin },
     { text: "No more than 2 candidates share a batch.", icon: MapPin },
     { text: "At least 2 candidates must be female.", icon: Users },
     { text: "A 10th Batch student must be a member of your team.", icon: Flag },

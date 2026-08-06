@@ -59,7 +59,7 @@ function getTeamChecklist(team) {
 
   return [
     { key: "size", label: `${TEAM_SIZE} candidates complete`, passed: filled.length === TEAM_SIZE },
-    { key: "batches", label: `${REQUIRED_BATCHES} distinct batches`, passed: uniqueBatches.size === REQUIRED_BATCHES },
+    { key: "batches", label: `Minimum ${REQUIRED_BATCHES} distinct batches`, passed: uniqueBatches.size >= REQUIRED_BATCHES },
     { key: "spread", label: `Max ${MAX_PER_BATCH} per batch`, passed: Object.values(batchCounts).every((c) => c <= MAX_PER_BATCH) },
     { key: "female", label: `${MIN_FEMALE}+ female candidates`, passed: femaleCount >= MIN_FEMALE },
     { key: "batch10", label: "Batch 10 represented", passed: hasRequiredBatch },
