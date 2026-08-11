@@ -1,303 +1,326 @@
-﻿import React, { useEffect, useState } from "react";
-import {
-  CheckCircle2,
-  Flag,
-  Info,
-  MapPin,
-  Sparkles,
-  Users,
-  Mountain,
-} from "lucide-react";
-import HackTrailRegisterForm from "../components/HackTrailRegisterForm";
-import {
-  loadHackTrailSettings,
-  loadRegisteredTeams,
-  saveRegisteredTeams,
-} from "./hackTrailRegistrationData";
+﻿import React, { useState } from "react";
+import Navbar from "../components/Navbar";
+import Footer from "../components/Footer";
 
-const TEAM_SIZE = 5;
-const REQUIRED_BATCHES = 3;
-const MAX_PER_BATCH = 2;
-const MIN_FEMALE = 2;
-
-/* ------------------------------------------------------------------ */
-/*  Visual identity                                                   */
-/* ------------------------------------------------------------------ */
-
-const FONTS = `
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
-`;
-
-/** A numbered checkpoint marker used to thread sections together along the trail. */
-function Checkpoint({ index, label, tone = "cyan" }) {
-  const tones = {
-    cyan: "border-cyan-400/40 text-cyan-300 shadow-cyan-400/20",
-    emerald: "border-emerald-400/40 text-emerald-300 shadow-emerald-400/20",
-    amber: "border-amber-400/40 text-amber-300 shadow-amber-400/20",
-  };
-  return (
-    <div className="flex items-center gap-3">
-      <div
-        className={`relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full border bg-[#0B1120] font-mono text-xs font-semibold shadow-[0_0_0_4px_rgba(2,6,23,0.9)] ${tones[tone]}`}
-      >
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-current opacity-10" />
-        {index}
-      </div>
-      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-slate-500">{label}</p>
-    </div>
-  );
-}
-
-/** Dashed vertical trail rendered behind a column of sections (desktop only). */
-function TrailSpine() {
-  return (
-    <div
-      className="pointer-events-none absolute left-[18px] top-3 bottom-3 hidden w-px md:block"
-      style={{
-        backgroundImage:
-          "repeating-linear-gradient(to bottom, rgba(56,189,248,0.35) 0, rgba(56,189,248,0.35) 6px, transparent 6px, transparent 14px)",
-      }}
-    />
-  );
-}
-
-function RulesSummary() {
-  const rules = [
-    { text: "Every team includes exactly 5 candidates.", icon: Users },
-    { text: "Candidate lists span at least 3 different batches.", icon: MapPin },
-    { text: "No more than 2 candidates share a batch.", icon: MapPin },
-    { text: "At least 2 candidates must be female.", icon: Users },
-    { text: "A 10th Batch student must be a member of your team.", icon: Flag },
-  ];
-
-  return (
-    <section className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-[#0B1120]/70 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl md:p-8">
-      <div className="mb-6 flex items-center justify-between border-b border-white/[0.06] pb-5">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300">
-            <Mountain className="h-5 w-5" />
-          </div>
-          <div>
-            <h2 className="font-[Space_Grotesk] text-lg font-semibold tracking-tight text-slate-100">
-              Conditions            </h2>
-            <p className="text-xs text-slate-500">The route every candidate list has to follow</p>
-          </div>
-        </div>
-        <span className="hidden rounded-full border border-cyan-400/20 bg-cyan-400/10 px-3.5 py-1 font-mono text-[11px] font-semibold text-cyan-300 sm:inline-block">
-          5 checkpoints
-        </span>
-      </div>
-      <div className="grid gap-3.5 md:grid-cols-2 lg:grid-cols-5">
-        {rules.map((rule, index) => {
-          const Icon = rule.icon;
-          return (
-            <div
-              key={rule.text}
-              className="group relative flex flex-col justify-between overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.02] p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-cyan-400/25 hover:bg-white/[0.04]"
-            >
-              <div className="mb-3 flex items-center justify-between">
-                <span className="font-mono text-[11px] font-semibold text-slate-600">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <Icon className="h-3.5 w-3.5 text-slate-600 transition-colors duration-200 group-hover:text-cyan-300" />
-              </div>
-              <p className="text-xs font-medium leading-relaxed text-slate-300">{rule.text}</p>
-            </div>
-          );
-        })}
-      </div>
-    </section>
-  );
-}
-
-function RegistrationOverview({ registeredCount, teamLimit }) {
-  const remaining = teamLimit - registeredCount;
-  const stats = [
-    { label: "Total capacity", value: teamLimit, note: `${teamLimit * TEAM_SIZE} participant slots overall`, icon: Users, tone: "cyan" },
-    { label: "Registered teams", value: registeredCount, note: "Confirmed entries on the trail", icon: CheckCircle2, tone: "emerald" },
-    { label: "Slots remaining for teams", value: remaining, note: "Still open for registration", icon: Sparkles, tone: "amber" },
-  ];
-  const toneMap = {
-    cyan: "border-cyan-400/20 bg-cyan-400/10 text-cyan-300",
-    emerald: "border-emerald-400/20 bg-emerald-400/10 text-emerald-300",
-    amber: "border-amber-400/20 bg-amber-400/10 text-amber-300",
-  };
-
-  return (
-    <section className="grid gap-4 md:grid-cols-3">
-      {stats.map((stat) => {
-        const Icon = stat.icon;
-        return (
-          <div
-            key={stat.label}
-            className="group relative overflow-hidden rounded-3xl border border-white/[0.06] bg-[#0B1120]/70 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5"
-          >
-            <div className="flex items-center justify-between">
-              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-500">
-                {stat.label}
-              </p>
-              <div className={`flex h-8 w-8 items-center justify-center rounded-xl border ${toneMap[stat.tone]}`}>
-                <Icon className="h-4 w-4" />
-              </div>
-            </div>
-            <p className="mt-4 font-[Space_Grotesk] text-4xl font-semibold tracking-tight text-slate-100">
-              {stat.value}
-            </p>
-            <p className="mt-1 text-xs text-slate-500">{stat.note}</p>
-          </div>
-        );
-      })}
-    </section>
-  );
-}
+// Assets
+import hacktrailImg from "../assets/Hacktrail.png"; 
+import logoBanner from "../assets/logo.jpeg";
+import harshanaImg from "../assets/harshana.jpg"; // Verify file extension (.jpg / .jpeg / .png)
+import nimeshkaImg from "../assets/nimeshka.jpg"; // Verify file extension (.jpg / .jpeg / .png)
 
 function HackTrailRegister() {
-  const [registeredTeams, setRegisteredTeams] = useState([]);
-  const [teamLimit, setTeamLimit] = useState(3);
-  const [loading, setLoading] = useState(true);
-  const [message, setMessage] = useState("");
+  // Puzzle state
+  const [userAnswer, setUserAnswer] = useState("");
+  const [isUnlocked, setIsUnlocked] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  useEffect(() => {
-    let mounted = true;
-    async function loadTeams() {
-      try {
-        const [teams, settings] = await Promise.all([
-          loadRegisteredTeams(),
-          loadHackTrailSettings(),
-        ]);
-        if (mounted) {
-          setRegisteredTeams(teams);
-          setTeamLimit(settings.teamLimit);
-        }
-      } catch {
-        setMessage("Saved registration data could not be loaded.");
-      } finally {
-        if (mounted) setLoading(false);
-      }
+  // Answer for the puzzle (case-insensitive check)
+  const CORRECT_ANSWER = "HELO"; // Binary: 01001000 01000101 01001100 01001111 = HELO
+
+  const handlePuzzleSubmit = (e) => {
+    e.preventDefault();
+    if (userAnswer.trim().toUpperCase() === CORRECT_ANSWER) {
+      setIsUnlocked(true);
+      setErrorMsg("");
+    } else {
+      setErrorMsg("Incorrect decryption key. Try again!");
     }
-    loadTeams();
-    return () => {
-      mounted = false;
-    };
-  }, []);
-
-  async function createTeam(team) {
-    if (registeredTeams.length >= teamLimit) {
-      setMessage("Registration is full. No more teams can join the trail.");
-      return false;
-    }
-    const nextTeams = [...registeredTeams, team];
-    await saveRegisteredTeams(nextTeams);
-    setRegisteredTeams(nextTeams);
-    setMessage(`${team.name} is on the trail. Registration confirmed.`);
-    return true;
-  }
-
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#070B14] px-4">
-        <style>{FONTS}</style>
-        <div className="flex items-center gap-3 rounded-2xl border border-white/[0.08] bg-[#0B1120] px-6 py-4">
-          <div className="h-4 w-4 animate-spin rounded-full border-2 border-cyan-400 border-t-transparent" />
-          <span className="font-mono text-xs text-slate-400">Loading...</span>
-        </div>
-      </div>
-    );
-  }
-
-  const registrationFull = registeredTeams.length >= teamLimit;
+  };
 
   return (
-    <div
-      className="min-h-screen px-4 py-12 font-[Inter] text-slate-200 antialiased"
-      style={{ background: "radial-gradient(ellipse 90% 60% at 50% -10%, #14213C 0%, #070B14 55%, #050810 100%)" }}
-    >
-      <style>{FONTS}</style>
-      <div className="mx-auto max-w-5xl space-y-8">
-        {/* Hero */}
-        <header className="relative overflow-hidden rounded-3xl border border-white/[0.06] bg-[#0B1120] p-8 shadow-2xl shadow-black/50 md:p-10">
-          <svg
-            className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.18]"
-            viewBox="0 0 800 300"
-            preserveAspectRatio="none"
-          >
-            {[40, 90, 140, 190, 240].map((y, i) => (
-              <path
-                key={y}
-                d={`M0 ${y} Q 150 ${y - 30} 300 ${y} T 600 ${y} T 900 ${y}`}
-                fill="none"
-                stroke={i % 2 === 0 ? "#22D3EE" : "#34D399"}
-                strokeWidth="1"
-              />
-            ))}
-          </svg>
-          <div className="absolute -right-16 -top-16 h-64 w-64 rounded-full bg-cyan-400/10 blur-3xl" />
-          <div className="relative z-10">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1 font-mono text-[11px] font-medium text-slate-300 backdrop-blur-md">
-              <Sparkles className="h-3.5 w-3.5 text-cyan-300" />
-              <span>ICTSC HackTrail 2026</span>
-            </div>
-            <h1 className="mt-4 font-[Space_Grotesk] text-3xl font-semibold tracking-tight text-slate-100 md:text-5xl">
-              Team Registration
-            </h1>
-            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-400">
-              Five checkpoints stand between your squad and the starting line. Fill in your candidate list —
-              the trail validates itself as you go.
-            </p>
-          </div>
-        </header>
+    <div className="min-h-screen bg-[#020617] text-white selection:bg-blue-500/30 font-sans antialiased relative overflow-hidden">
+      {/* Ambient Background Lighting */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-600/15 blur-[140px] pointer-events-none rounded-full" />
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-indigo-500/10 blur-[130px] pointer-events-none rounded-full" />
 
-        {message && (
-          <div className="flex items-center gap-3 rounded-2xl border border-emerald-400/20 bg-emerald-400/[0.06] p-4 text-sm font-medium text-emerald-100 shadow-lg shadow-emerald-400/10 backdrop-blur-xl">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-emerald-400/20 bg-emerald-400/10 text-emerald-300">
-              <Info className="h-5 w-5" />
-            </div>
-            <span>{message}</span>
-          </div>
-        )}
+      <div className="relative z-10 flex flex-col min-h-screen">
+        <Navbar />
 
-        {/* Trail body */}
-        <div className="relative">
-          <TrailSpine />
-          <div className="space-y-8 md:pl-14">
-            <div className="hidden md:block">
-              <Checkpoint index="01" label="Conditions" tone="cyan" />
-            </div>
-            <RulesSummary />
+        <main className="flex-1 max-w-6xl mx-auto px-6 py-12 md:py-16 w-full">
+          
+          {/* ================= HERO SECTION ================= */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center mb-16">
+            
+            {/* Left Column: Headers & Logos */}
+            <div className="lg:col-span-7 text-center lg:text-left order-2 lg:order-1">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-400 text-xs md:text-sm font-bold tracking-widest uppercase mb-6 shadow-sm">
+                <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+                HackTrail 3.0 Edition
+              </div>
+              
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-black tracking-tight uppercase text-white leading-tight">
+                Hack<span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-indigo-300 to-cyan-400">Trail 3.0</span>
+              </h1>
+              
+              <p className="text-slate-300 text-sm md:text-base font-semibold mt-3 uppercase tracking-[0.25em]">
+                Faculty of Technology <span className="text-slate-600 mx-2">|</span> University of Ruhuna
+              </p>
 
-            <div className="hidden md:block">
-              <Checkpoint index="02" label="Teams status" tone="emerald" />
-            </div>
-            <RegistrationOverview registeredCount={registeredTeams.length} teamLimit={teamLimit} />
-
-            <div className="hidden md:block">
-              <Checkpoint index={registrationFull ? "—" : "03"} label={registrationFull ? "Trail closed" : "Build your candidate list"} tone="amber" />
-            </div>
-            {registrationFull ? (
-              <div className="rounded-3xl border border-white/[0.06] bg-[#0B1120]/70 p-12 text-center shadow-2xl shadow-black/40 backdrop-blur-xl">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl border border-amber-400/20 bg-amber-400/10 text-amber-300">
-                  <Flag className="h-8 w-8" />
+              {/* Logo Banner Container */}
+              <div className="mt-8 pt-6 border-t border-slate-800/80 flex flex-col items-center lg:items-start gap-3">
+                <p className="text-xs uppercase tracking-widest text-slate-400 font-bold">Organized &amp; Supported By</p>
+                <div className="p-3 rounded-2xl bg-slate-900/60 border border-slate-800/80 backdrop-blur-md inline-block max-w-full">
+                  <img
+                    src={logoBanner}
+                    alt="HackTrail Organization & Sponsor Logos"
+                    className="w-full max-w-sm sm:max-w-md h-auto object-contain rounded-xl opacity-90 hover:opacity-100 transition-opacity"
+                  />
                 </div>
-                <h2 className="mt-4 font-[Space_Grotesk] text-2xl font-semibold text-slate-100">
-                  Registration fully allocated
-                </h2>
-                <p className="mt-1 text-sm text-slate-500">
-                  All {teamLimit} available team registrations have been reserved.
+              </div>
+            </div>
+
+            {/* Right Column: Poster/Cover Graphic */}
+            <div className="lg:col-span-5 flex justify-center order-1 lg:order-2">
+              <div className="relative group w-full max-w-xs sm:max-w-sm md:max-w-md aspect-square">
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-600 to-cyan-500 rounded-3xl blur-xl opacity-30 group-hover:opacity-60 transition duration-500"></div>
+                
+                <img
+                  src={hacktrailImg}
+                  alt="HackTrail 3.0 Cover"
+                  className="relative w-full h-full object-cover rounded-3xl border border-blue-500/30 shadow-2xl shadow-blue-950/50"
+                />
+              </div>
+            </div>
+
+          </section>
+
+          {/* ================= REGISTRATION ALERT ================= */}
+          <div className="mb-12 relative rounded-2xl bg-slate-900/70 border border-red-500/30 backdrop-blur-xl p-6 sm:p-8 text-center transition-all duration-300 hover:border-red-500/50 shadow-xl shadow-red-950/20 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-red-500/5 to-transparent pointer-events-none" />
+            
+            <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+              <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-red-500/10 border border-red-500/30 shrink-0">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                </span>
+                <p className="text-xs md:text-sm font-bold uppercase tracking-widest text-red-400">
+                  Registration Closed
                 </p>
               </div>
-            ) : (
-              <HackTrailRegisterForm
-                existingTeams={registeredTeams}
-                submitLabel="Complete Registration"
-                onSubmit={createTeam}
-              />
-            )}
+              
+              <p className="text-slate-200 text-sm md:text-base font-medium max-w-2xl">
+                Registration for HackTrail 3.0 is officially closed. Thank you to everyone who registered — get ready for the ultimate trial!
+              </p>
+            </div>
           </div>
-        </div>
+
+          {/* ================= CONTENT GRID (2 COLUMNS) ================= */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start mb-12">
+            
+            {/* Left Card: Question Hint Vault */}
+            <div className="relative rounded-2xl bg-slate-900/80 border border-blue-500/30 backdrop-blur-xl p-6 sm:p-8 text-center transition-all duration-300 hover:border-blue-500/50 shadow-2xl shadow-blue-950/30 overflow-hidden h-full flex flex-col justify-between">
+              <div className="absolute top-3 right-4 opacity-15 font-mono text-xs select-none tracking-widest">
+                01001000 01000101
+              </div>
+
+              <div>
+                <div className="inline-flex items-center justify-center p-3.5 rounded-full bg-blue-500/10 border border-blue-500/20 mb-4">
+                  {isUnlocked ? (
+                    <svg className="w-8 h-8 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                    </svg>
+                  ) : (
+                    <svg className="w-8 h-8 text-blue-400 animate-bounce" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                    </svg>
+                  )}
+                </div>
+
+                <h2 className="text-base md:text-lg font-extrabold uppercase tracking-widest text-blue-400 mb-2">
+                  Question Hint Vault
+                </h2>
+
+                {!isUnlocked ? (
+                  /* Puzzle Interactive View */
+                  <div className="max-w-md mx-auto mt-4">
+                    <p className="text-slate-200 text-sm font-medium mb-4">
+                      Decrypt the binary cipher to unlock the official <strong>HackTrail 3.0 Hint</strong>:
+                    </p>
+
+                    <div className="p-3.5 bg-slate-950 rounded-xl border border-slate-800 font-mono text-sm md:text-base text-cyan-400 font-semibold tracking-wider mb-5 shadow-inner">
+                      01001000 01000101 01001100 01001111
+                    </div>
+
+                    <form onSubmit={handlePuzzleSubmit} className="flex flex-col sm:flex-row gap-3">
+                      <input
+                        type="text"
+                        placeholder="Enter decrypted key..."
+                        value={userAnswer}
+                        onChange={(e) => setUserAnswer(e.target.value)}
+                        className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
+                      />
+                      <button
+                        type="submit"
+                        className="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white text-xs md:text-sm font-bold tracking-wide uppercase transition-all shadow-md active:scale-95 shrink-0"
+                      >
+                        Unlock
+                      </button>
+                    </form>
+
+                    {errorMsg && (
+                      <p className="text-red-400 text-xs mt-3 font-semibold">{errorMsg}</p>
+                    )}
+                  </div>
+                ) : (
+                  /* Unlocked Hint View */
+                  <div className="p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/30 max-w-lg mx-auto mt-4">
+                    <span className="inline-block px-3 py-1 rounded-md bg-emerald-500/20 text-emerald-400 text-xs font-bold uppercase mb-3 tracking-wider">
+                      Access Granted
+                    </span>
+                    <p className="text-slate-100 text-sm md:text-base leading-relaxed font-medium">
+                      The HackTrail 3.0 question hint will be displayed here. Stay tuned — coming soon!
+                    </p>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Right Card: Fees and Prizes Section */}
+            <div className="rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl p-6 sm:p-8 transition-all duration-300 hover:border-blue-500/30 shadow-xl flex flex-col justify-between">
+              <div>
+                <h2 className="text-sm md:text-base font-extrabold uppercase tracking-widest text-blue-400 mb-6 flex items-center gap-2.5">
+                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+                  Fees &amp; Prizes
+                </h2>
+
+                {/* Fee Box */}
+                <div className="mb-6 p-5 rounded-xl bg-slate-950/60 border border-slate-800/80">
+                  <p className="text-xs text-slate-400 font-bold uppercase tracking-wider mb-2">
+                    Registration Fee
+                  </p>
+                  
+                  <div className="flex flex-wrap items-baseline gap-2">
+                    <p className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+                      Rs. 1,500
+                    </p>
+                    <span className="text-slate-300 text-sm font-semibold">
+                      per team
+                    </span>
+                    <span className="text-slate-400 text-xs font-normal">
+                      (5 members &times; Rs. 300 each)
+                    </span>
+                  </div>
+
+                  <p className="text-slate-300 text-xs md:text-sm mt-3 pt-3 border-t border-slate-800/80 leading-relaxed font-medium">
+                    The fee covers dinner, Nescafe, and a short eat item for every team member.
+                  </p>
+                </div>
+
+                {/* Prize Rows */}
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center p-4 rounded-xl bg-gradient-to-r from-blue-500/15 via-slate-950/50 to-transparent border border-blue-500/30 transition-transform duration-200 hover:translate-x-1">
+                    <span className="text-xs md:text-sm font-bold text-slate-100 uppercase tracking-wider">
+                      Championship
+                    </span>
+                    <span className="text-lg sm:text-xl font-black text-blue-400 tracking-tight">
+                      Rs. 15,000
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/60 transition-transform duration-200 hover:translate-x-1">
+                    <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                      First Runner-up
+                    </span>
+                    <span className="text-base sm:text-lg font-bold text-slate-200 tracking-tight">
+                      Rs. 10,000
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between items-center p-3.5 rounded-xl bg-slate-950/40 border border-slate-800/60 transition-transform duration-200 hover:translate-x-1">
+                    <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+                      Second Runner-up
+                    </span>
+                    <span className="text-base sm:text-lg font-bold text-slate-200 tracking-tight">
+                      Rs. 5,000
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          {/* ================= CONTACT / SUPPORT SECTION ================= */}
+          <div className="rounded-2xl bg-slate-900/70 border border-slate-800 backdrop-blur-xl p-6 sm:p-8 transition-all duration-300 hover:border-blue-500/30 shadow-xl">
+            <h2 className="text-sm md:text-base font-extrabold uppercase tracking-widest text-blue-400 mb-6 flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
+              Need Help? Contact Event Coordinators
+            </h2>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              
+              {/* Harshana - Vice President Contact */}
+              <div className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-blue-500/40 transition-all flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                <img
+                  src={harshanaImg}
+                  alt="Harshana"
+                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover border-2 border-blue-500/40 shrink-0 shadow-lg"
+                />
+                <div className="flex-1 text-center sm:text-left flex flex-col justify-between h-full w-full">
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Harshana</h3>
+                    <div className="inline-block px-2.5 py-0.5 rounded bg-blue-500/10 text-blue-400 text-xs font-bold uppercase tracking-wider my-1.5">
+                      Vice President
+                    </div>
+                    <p className="text-xs text-slate-400 font-medium leading-relaxed">
+                      For any issues or general inquiries regarding HackTrail
+                    </p>
+                  </div>
+                  <a
+                    href="tel:0763384586"
+                    className="inline-flex items-center justify-center sm:justify-start gap-2.5 text-sm sm:text-base font-extrabold text-white hover:text-blue-400 transition-colors group mt-4"
+                  >
+                    <span className="p-2 rounded-xl bg-blue-500/10 border border-blue-500/20 text-blue-400 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </span>
+                    076 338 4586
+                  </a>
+                </div>
+              </div>
+
+              {/* Nimeshka - Team Coordinator Contact */}
+              <div className="p-5 rounded-2xl bg-slate-950/60 border border-slate-800/80 hover:border-blue-500/40 transition-all flex flex-col sm:flex-row gap-5 items-center sm:items-start">
+                <img
+                  src={nimeshkaImg}
+                  alt="Nimeshka"
+                  className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover border-2 border-indigo-500/40 shrink-0 shadow-lg"
+                />
+                <div className="flex-1 text-center sm:text-left flex flex-col justify-between h-full w-full">
+                  <div>
+                    <h3 className="text-lg font-bold text-white">Nimeshka</h3>
+                    <div className="inline-block px-2.5 py-0.5 rounded bg-indigo-500/10 text-indigo-400 text-xs font-bold uppercase tracking-wider my-1.5">
+                      Team Coordinator
+                    </div>
+                    <p className="text-xs text-slate-400 font-medium leading-relaxed">
+                      Committee support &amp; team coordination
+                    </p>
+                  </div>
+                  <a
+                    href="tel:0763387898"
+                    className="inline-flex items-center justify-center sm:justify-start gap-2.5 text-sm sm:text-base font-extrabold text-white hover:text-indigo-400 transition-colors group mt-4"
+                  >
+                    <span className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                      </svg>
+                    </span>
+                     070 167 1204
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </main>
+
+        <Footer />
       </div>
     </div>
   );
 }
 
 export default HackTrailRegister;
-
