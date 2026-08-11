@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 
 // Assets
-import hacktrailImg from "../assets/Hacktrail.png"; 
+import hacktrailImg from "../assets/hacktrail.png"; 
 import logoBanner from "../assets/logo.jpeg";
 import harshanaImg from "../assets/harshana.jpg"; // Verify file extension (.jpg / .jpeg / .png)
 import nimeshkaImg from "../assets/nimeshka.jpg"; // Verify file extension (.jpg / .jpeg / .png)
