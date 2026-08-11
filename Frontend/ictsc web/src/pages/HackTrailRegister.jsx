@@ -169,7 +169,7 @@ function HackTrailRegister() {
                       Access Granted
                     </span>
                     <p className="text-slate-100 text-sm md:text-base leading-relaxed font-medium">
-                      The HackTrail 3.0 question hint will be displayed here. Stay tuned — coming soon!
+                      💡 Hint: The opportunity may already exist within the community—you just need to identify what is preventing it from reaching those who need it most.
                     </p>
                   </div>
                 )}
