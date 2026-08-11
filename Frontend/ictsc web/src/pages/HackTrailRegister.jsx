@@ -5,8 +5,8 @@ import Footer from "../components/Footer";
 // Assets
 import hacktrailImg from "../assets/hacktrail.png"; 
 import logoBanner from "../assets/logo.jpeg";
-import harshanaImg from "../assets/harshana.jpg"; // Verify file extension (.jpg / .jpeg / .png)
-import nimeshkaImg from "../assets/nimeshka.jpg"; // Verify file extension (.jpg / .jpeg / .png)
+import harshanaImg from "../assets/Harshana.jpg"; // Verify file extension (.jpg / .jpeg / .png)
+import nimeshkaImg from "../assets/Nimeshka.jpg"; // Verify file extension (.jpg / .jpeg / .png)
 
 function HackTrailRegister() {
   // Puzzle state
